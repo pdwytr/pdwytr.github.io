@@ -123,7 +123,7 @@ echo "0.164.0" > .hugoversion
 
 ```toml
 baseURL = "https://moknshaik.com/"
-languageCode = "en-us"
+locale = "en-us"                 # NOT languageCode — deprecated in Hugo 0.158.0
 title = "Mohammed Khalid Shaik"
 enableRobotsTXT = true
 enableGitInfo = true
