@@ -20,8 +20,8 @@ Success criteria:
 - Publishing a post is: create file → write → preview locally → `git push`. Live in about a minute.
 - Adding a picture to a post is: drop the file next to the post → one line of markdown.
 - A shared link renders a proper social card with title and site identity.
-- The deployed site is HTML and CSS. No client-side framework, no runtime to break.
-- Toolchain is two compiled binaries. No `package.json`, no lockfile, no dependency-update treadmill.
+- The deployed site is HTML and CSS, apart from one ~15-line inline theme-toggle script (§4). No client-side framework, no hydration, nothing that can fail at runtime.
+- Toolchain is compiled binaries only — Hugo to build, `lychee` to check links, and the Go toolchain for `tools/verify`. No `package.json`, no lockfile, no dependency-update treadmill.
 
 Non-goal: this is not a web app. Nothing here requires a server.
 
@@ -34,7 +34,7 @@ Non-goal: this is not a web app. Nothing here requires a server.
 | Concern | Decision |
 |---|---|
 | Site generator | Hugo, pinned version, no third-party theme |
-| Content format | `.md` or `.html` — both are native Hugo content formats |
+| Content format | `.md` or `.html` in `content/writing/` and `content/projects/` — both are native Hugo content formats |
 | Images in content | Page bundles + an image render hook (§6) |
 | Syntax highlighting | Chroma (built into Hugo), class-based, dual light/dark |
 | Taxonomies, RSS, sitemap, pagination, reading time | Hugo built-ins, no configuration beyond enabling tags |
@@ -83,7 +83,9 @@ Comments, search, newsletter, analytics, tag-filtering UI, dark/light beyond a s
 /404.html
 ```
 
-`posts` and `projects` are two Hugo sections sharing one rendering pipeline, differing only in frontmatter schema and index layout. This is the central simplification: one prose renderer, two content shapes.
+`writing` and `projects` are two Hugo sections sharing one rendering pipeline, differing only in frontmatter schema and index layout. This is the central simplification: one prose renderer, two content shapes.
+
+**Section naming:** the content directory is `content/writing/`, not `content/posts/`, so the directory and the URL match. This avoids a `[permalinks]` remap and the class of bug where the section list page and its children disagree about their base path.
 
 ---
 
@@ -129,7 +131,7 @@ Exactly one inline script, roughly 15 lines with no dependencies: read the store
 
 ### 5.1 Posts
 
-`content/posts/<slug>/index.md` (or `index.html`)
+`content/writing/<slug>/index.md` (or `index.html`)
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
@@ -179,7 +181,7 @@ CI additionally runs with warnings escalated to failures, so a silently-degraded
 Images live **inside the post's own directory** (a Hugo page bundle):
 
 ```
-content/posts/leverage-problem/
+content/writing/leverage-problem/
 ├── index.md
 ├── hero.png
 └── reconciler-states.png
@@ -251,14 +253,14 @@ Initial case studies, ported from the résumé:
 ├── hugo.toml
 ├── Makefile                      # new, serve, build, check, verify
 ├── archetypes/
-│   ├── posts.md
+│   ├── writing.md
 │   └── projects.md
 ├── assets/
 │   ├── css/{tokens,base,layout,prose,code-dark,code-light}.css
 │   ├── fonts/*.woff2
 │   └── og/base.png
 ├── content/
-│   ├── posts/<slug>/index.md + images
+│   ├── writing/<slug>/index.md + images
 │   ├── projects/<slug>/index.md + images
 │   ├── resume.md
 │   └── about.md
@@ -316,7 +318,7 @@ Tokens, both themes, type scale, self-hosted fonts, dual Chroma stylesheets, pro
 *Done when:* a hand-written sample page renders correctly in both themes with no external requests.
 
 **Phase 2 — Writing.**
-Posts section, archetype, writing index with the `$ ls` treatment, post layout, image render hook, RSS, sitemap, OG card generation, `head` meta and JSON-LD.
+`writing` section, archetype, index with the `$ ls` treatment, post layout, image render hook, RSS, sitemap, OG card generation, `head` meta and JSON-LD.
 *Done when:* a post with two pictures publishes end to end and its shared link previews correctly.
 **This is the point at which publishing can begin; later phases do not block writing.**
 
