@@ -20,7 +20,9 @@ Every task's requirements implicitly include this section.
 - **Go code is stdlib-only.** `go.mod` must have zero `require` lines for third-party packages.
 - **Monospace (JetBrains Mono) is for metadata, labels, dates, and code only — never body copy.** Body is Inter.
 - **Two accent colors maximum.**
-- **Client-side JavaScript budget: one inline theme-init script, ≤20 lines.** No other JS anywhere on the site.
+- **Client-side JavaScript budget: one inline theme-init script plus one inline toggle handler, ≤20 lines combined.** No other JS anywhere on the site.
+- **Theme resolution is JavaScript's job.** `theme-init.html` always stamps `data-theme` on `<html>` before first paint. No stylesheet contains a `prefers-color-scheme` block — a single attribute selector per theme is the only mechanism. Accepted trade-off: JavaScript disabled means the dark theme.
+- **Implementation happens directly on `main`** (explicitly authorised by the repo owner). `main` is the Pages publish branch, and the `github-pages` environment only accepts deploys from the default branch.
 - `baseURL = "https://moknshaik.com/"`. Built output must contain `CNAME` with `moknshaik.com`.
 - **No external network requests from the deployed page** — fonts self-hosted, no CDN, no analytics.
 - Repo is `pdwytr/pdwytr.github.io` (a GitHub *user* site). Deploy branch is `main`.
@@ -532,20 +534,18 @@ Dark is the default; light overrides it. Every color in the site lives here and 
   --accent:    #9a5b00;
   --accent-2:  #1a7f6f;
 }
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --bg:        #ffffff;
-    --bg-elev:   #f6f8fa;
-    --fg:        #1f2328;
-    --fg-muted:  #656d76;
-    --border:    #d1d9e0;
-    --code-bg:   #f6f8fa;
-    --accent:    #9a5b00;
-    --accent-2:  #1a7f6f;
-  }
-}
 ```
+
+**Theme resolution is JavaScript's job, not CSS's.** There is deliberately no
+`@media (prefers-color-scheme: ...)` block here. `theme-init.html` (Task 6)
+resolves the OS preference and *always* stamps `data-theme` on `<html>` before
+first paint, so a single attribute selector covers every case. This keeps the
+Chroma stylesheets (Task 5) to one copy each instead of two.
+
+Accepted trade-off: a visitor with JavaScript disabled gets the dark theme
+regardless of their OS setting. Chrome and code blocks stay consistent with each
+other in that case, which is why the media query is dropped here as well as in
+Task 5 — a half-measure would give such a visitor light chrome with dark code.
 
 - [ ] **Step 3: Write `assets/css/base.css`**
 
@@ -758,6 +758,11 @@ Expected: the HTML contains `class="chroma"` (Chroma is emitting classes) but th
 
 Chroma emits bare selectors like `.chroma .k { ... }`. Wrapping each file in a scoping selector uses native CSS nesting (baseline-supported), so `.chroma .k` becomes `:root[data-theme="dark"] .chroma .k`.
 
+Each stylesheet is emitted **once**. No `prefers-color-scheme` variant is
+generated: `theme-init.html` (Task 6) always stamps `data-theme`, so the two
+attribute selectors cover every case. Generating a media-query copy as well
+would duplicate ~200 machine-generated lines per theme for no behavioural gain.
+
 ```make
 .PHONY: chroma
 chroma:
@@ -767,9 +772,6 @@ chroma:
 	printf ':root[data-theme="light"] {\n' > assets/css/code-light.css
 	hugo gen chromastyles --style=github >> assets/css/code-light.css
 	printf '}\n' >> assets/css/code-light.css
-	printf '@media (prefers-color-scheme: light) {\n  :root:not([data-theme]) {\n' >> assets/css/code-light.css
-	hugo gen chromastyles --style=github >> assets/css/code-light.css
-	printf '  }\n}\n' >> assets/css/code-light.css
 	@wc -l assets/css/code-dark.css assets/css/code-light.css
 ```
 
@@ -828,7 +830,7 @@ git commit -m "feat: theme-scoped chroma stylesheets for both themes"
 
 **Interfaces:**
 - Consumes: `--bg`/`--fg` tokens and `.theme-toggle` class from Task 4
-- Produces: `data-theme` attribute on `<html>`, persisted in `localStorage` under key `theme`. This is the **entire** JavaScript budget for the site.
+- Produces: `data-theme` on `<html>` — **always set, on every page load** — persisted in `localStorage` under key `theme`. Task 4's tokens and Task 5's Chroma stylesheets both depend on the attribute always being present; they contain no `prefers-color-scheme` fallback. This is the **entire** JavaScript budget for the site.
 
 - [ ] **Step 1: Write the failing check**
 
@@ -840,36 +842,41 @@ Expected: `0`.
 
 - [ ] **Step 2: Write `layouts/_partials/theme-init.html`**
 
-This must run in `<head>`, before first paint, or the page flashes the wrong theme.
+This must run in `<head>`, before first paint, or the page flashes the wrong theme. It resolves the OS preference when nothing is stored, so `data-theme` is **always** set — Task 4's tokens and Task 5's Chroma stylesheets rely on that.
 
 ```go-html-template
 <script>
 (function () {
-  try {
-    var t = localStorage.getItem("theme");
-    if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
-  } catch (e) {}
+  var t = null;
+  try { t = localStorage.getItem("theme"); } catch (e) {}
+  if (t !== "light" && t !== "dark") {
+    t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  }
+  document.documentElement.dataset.theme = t;
 })();
 </script>
 ```
 
+The `localStorage` read is wrapped because it throws in some privacy modes; the
+`matchMedia` fallback and the attribute write are outside the `try` so a storage
+failure still yields a correctly themed page.
+
 - [ ] **Step 3: Write `layouts/_partials/theme-toggle.html`**
+
+`theme-init.html` guarantees `data-theme` is already set, so the toggle just inverts it.
 
 ```go-html-template
 <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle colour theme">theme</button>
 <script>
 document.querySelector("[data-theme-toggle]").addEventListener("click", function () {
   var r = document.documentElement;
-  var dark = r.dataset.theme
-    ? r.dataset.theme === "dark"
-    : !window.matchMedia("(prefers-color-scheme: light)").matches;
-  r.dataset.theme = dark ? "light" : "dark";
+  r.dataset.theme = r.dataset.theme === "dark" ? "light" : "dark";
   try { localStorage.setItem("theme", r.dataset.theme); } catch (e) {}
 });
 </script>
 ```
 
-Combined with Step 2 this is 18 lines, within the 20-line budget in Global Constraints.
+Combined with Step 2 this is 17 lines, within the 20-line budget in Global Constraints.
 
 - [ ] **Step 4: Wire both into `layouts/baseof.html`**
 
