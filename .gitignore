@@ -11,3 +11,6 @@ hugo_stats.json
 .idea/
 .vscode/
 *.swp
+
+# Agent scratch (subagent-driven-development workspace)
+/.superpowers/
