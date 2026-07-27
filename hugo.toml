@@ -1,0 +1,36 @@
+baseURL = "https://moknshaik.com/"
+languageCode = "en-us"
+title = "Mohammed Khalid Shaik"
+enableRobotsTXT = true
+enableGitInfo = true
+timeZone = "America/Chicago"
+
+# Only tags. Hugo's default also enables categories, which we do not want.
+[taxonomies]
+  tag = "tags"
+
+[markup.goldmark.renderer]
+  unsafe = true          # allow raw HTML inside markdown
+
+[markup.highlight]
+  noClasses = false      # emit CSS classes so both themes can be styled
+  lineNos = false
+  tabWidth = 2
+
+[markup.tableOfContents]
+  startLevel = 2
+  endLevel = 3
+
+[outputs]
+  home = ["html", "rss", "json"]
+
+# Spec calls for /rss.xml; Hugo's default base name is "index".
+[outputFormats.rss]
+  baseName = "rss"
+
+[params]
+  author = "Mohammed Khalid Shaik"
+  description = "Backend-leaning application engineer. Python services, APIs, and the systems around them."
+  email = "moknshaik@gmail.com"
+  github = "https://github.com/pdwytr"
+  linkedin = "https://www.linkedin.com/in/pdwytr/"
