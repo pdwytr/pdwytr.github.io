@@ -1,0 +1,14 @@
+{{ define "main" }}
+  <header class="section-head">
+    <h1><span class="prompt">$</span> ls tags/</h1>
+  </header>
+  <ul class="rows">
+    {{ range .Pages.ByTitle }}
+      <li class="row">
+        <span class="row__date">{{ len .Pages }}</span>
+        <a class="row__title" href="{{ .RelPermalink }}">#{{ .Title }}</a>
+        <span class="row__kind">[tag]</span>
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

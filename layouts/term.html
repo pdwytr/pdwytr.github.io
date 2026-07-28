@@ -1,0 +1,9 @@
+{{ define "main" }}
+  <header class="section-head">
+    <h1><span class="prompt">$</span> grep -rl '#{{ .Title }}'</h1>
+    <p class="section-head__desc">{{ len .Pages }} {{ cond (eq (len .Pages) 1) "post" "posts" }} tagged <code>{{ .Title }}</code>.</p>
+  </header>
+  <ul class="rows">
+    {{ range .Pages.ByDate.Reverse }}{{ partial "post-row.html" . }}{{ end }}
+  </ul>
+{{ end }}
