@@ -1,7 +1,7 @@
 HUGO_VERSION := $(shell cat .hugoversion)
 BASEURL := https://moknshaik.com/
 
-.PHONY: help serve build new project check clean fonts chroma
+.PHONY: help serve build new project check clean fonts chroma ogbase
 
 help:
 	@echo "make serve              live preview with drafts  -> http://localhost:1313"
@@ -57,3 +57,9 @@ chroma:
 	hugo gen chromastyles --style=github >> assets/css/code-light.css
 	printf '}\n' >> assets/css/code-light.css
 	@wc -l assets/css/code-dark.css assets/css/code-light.css
+
+.PHONY: ogbase
+ogbase:
+	mkdir -p assets/og
+	go run ./tools/ogbase -out assets/og/base.png
+	go run ./tools/ogbase -out static/og-default.png
