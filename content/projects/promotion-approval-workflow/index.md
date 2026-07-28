@@ -32,4 +32,4 @@ Apache Airflow DAGs orchestrate the approval workflow end to end, calling out to
 
 ## Outcome
 
-The workflow cut the team's manual effort on approvals by 80% and reduced promotion-related leakage — spend lost to promotions that ran longer or looser than intended — by about $200K a month. The saving was measured as the reduction in that leakage after duration controls went live, compared against the prior manual process.
+The workflow cut the team's manual effort on approvals by 80% and reduced promotion-related leakage — spend lost to promotions that ran longer or looser than intended — by about $200K a month.

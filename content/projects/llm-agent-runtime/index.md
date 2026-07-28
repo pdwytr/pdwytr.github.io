@@ -9,13 +9,13 @@ role: "Application Engineer"
 org: "Integrated Analytics Solutions"
 stack: ["Python", "FastAPI", "WebSocket", "PostgreSQL", "pgvector", "pytest"]
 metrics:
-  - label: "endpoints shipped"
+  - label: "endpoints shipped (team)"
     value: "71"
-  - label: "tests"
+  - label: "tests (team)"
     value: "5,900+"
-  - label: "model providers"
+  - label: "model providers (team)"
     value: "100+"
-  - label: "time to ship"
+  - label: "time to ship (team)"
     value: "< 4 months"
 featured: false
 weight: 40
