@@ -130,3 +130,16 @@
   border: 1px solid var(--border); border-radius: var(--radius);
   padding: 0 var(--space-2);
 }
+
+.intro { margin-bottom: var(--space-5); }
+.intro h1 { font-size: var(--step-4); line-height: 1.05; letter-spacing: -0.03em; margin: 0 0 var(--space-3); }
+.intro__lede { font-size: var(--step-1); color: var(--fg-muted); max-width: var(--measure); margin: 0 0 var(--space-3); }
+.intro__links { display: flex; gap: var(--space-3); flex-wrap: wrap; font-family: var(--font-mono); font-size: var(--step--1); margin: 0; }
+
+.home-block { margin-bottom: var(--space-5); }
+.home-block__label {
+  font-family: var(--font-mono); font-size: var(--step--1); font-weight: 400;
+  color: var(--fg-muted); margin: 0 0 var(--space-2);
+  border-bottom: 1px solid var(--border); padding-bottom: var(--space-1);
+}
+.home-block__more { font-family: var(--font-mono); font-size: var(--step--1); margin: var(--space-3) 0 0; }

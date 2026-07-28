@@ -1,4 +1,37 @@
 {{ define "main" }}
-  <h1>{{ site.Title }}</h1>
-  <p>Pipeline check — {{ now.Format "2006-01-02" }}</p>
+  <section class="intro">
+    <h1>{{ site.Params.author }}</h1>
+    <p class="intro__lede">
+      Backend-leaning application engineer. I build Python services and the
+      operational machinery around them — APIs that hold a contract under load,
+      state that reconciles instead of drifting, and tests that make the next
+      change safe.
+    </p>
+    <p class="intro__links">
+      <a href="{{ "/projects/" | relURL }}">projects</a>
+      <a href="{{ "/writing/" | relURL }}">writing</a>
+      <a href="{{ "/resume/" | relURL }}">résumé</a>
+      <a href="{{ site.Params.github }}">github</a>
+    </p>
+  </section>
+
+  {{ with where site.RegularPages "Section" "writing" }}
+    <section class="home-block">
+      <h2 class="home-block__label"><span class="prompt">$</span> ls -t writing/ | head -3</h2>
+      <ul class="rows">
+        {{ range first 3 (.ByDate.Reverse) }}{{ partial "post-row.html" . }}{{ end }}
+      </ul>
+      <p class="home-block__more"><a href="{{ "/writing/" | relURL }}">all posts →</a></p>
+    </section>
+  {{ end }}
+
+  {{ with where (where site.RegularPages "Section" "projects") "Params.featured" true }}
+    <section class="home-block">
+      <h2 class="home-block__label"><span class="prompt">$</span> ls projects/ --featured</h2>
+      <div class="cards">
+        {{ range .ByWeight }}{{ partial "project-card.html" . }}{{ end }}
+      </div>
+      <p class="home-block__more"><a href="{{ "/projects/" | relURL }}">all projects →</a></p>
+    </section>
+  {{ end }}
 {{ end }}
