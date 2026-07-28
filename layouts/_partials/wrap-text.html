@@ -1,0 +1,26 @@
+{{- /*
+  Greedy word-wrap. Returns lines joined by newlines.
+  Call: partial "wrap-text.html" (dict "text" .Title "width" 26 "max" 3)
+*/ -}}
+{{- $width := .width -}}
+{{- $max := .max -}}
+{{- $lines := slice -}}
+{{- $cur := "" -}}
+{{- range split .text " " -}}
+  {{- $word := . -}}
+  {{- if eq $cur "" -}}
+    {{- $cur = $word -}}
+  {{- else if le (add (len $cur) (add 1 (len $word))) $width -}}
+    {{- $cur = printf "%s %s" $cur $word -}}
+  {{- else -}}
+    {{- $lines = $lines | append $cur -}}
+    {{- $cur = $word -}}
+  {{- end -}}
+{{- end -}}
+{{- if ne $cur "" -}}{{- $lines = $lines | append $cur -}}{{- end -}}
+{{- if gt (len $lines) $max -}}
+  {{- $keep := first (sub $max 1) $lines -}}
+  {{- $tail := printf "%s…" (index $lines (sub $max 1)) -}}
+  {{- $lines = $keep | append $tail -}}
+{{- end -}}
+{{- delimit $lines "\n" -}}

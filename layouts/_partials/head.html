@@ -1,6 +1,6 @@
 {{- $desc := or .Params.description .Summary site.Params.description -}}
 {{- $title := cond .IsHome site.Title (printf "%s · %s" .Title site.Title) -}}
-{{- $og := absURL "og-default.png" -}}
+{{- $og := partial "og-image.html" . -}}
 
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $desc | plainify | truncate 160 }}">

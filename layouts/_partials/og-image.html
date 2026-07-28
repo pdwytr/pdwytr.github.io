@@ -1,0 +1,25 @@
+{{- /* Returns an absolute URL for this page's social card. */ -}}
+{{- $url := absURL "og-default.png" -}}
+{{- $base := resources.Get "og/base.png" -}}
+{{- $font := resources.Get "fonts/JetBrainsMono-Bold.ttf" -}}
+
+{{- if and $base $font (eq .Kind "page") (in (slice "writing" "projects") .Section) -}}
+  {{- $title := partial "wrap-text.html" (dict "text" .Title "width" 26 "max" 3) -}}
+  {{- $titleFilter := images.Text $title (dict
+        "color" "#e6edf3"
+        "size" 62
+        "linespacing" 20
+        "x" 80
+        "y" 130
+        "font" $font) -}}
+  {{- $markFilter := images.Text "moknshaik.com" (dict
+        "color" "#e0853f"
+        "size" 28
+        "x" 82
+        "y" 508
+        "font" $font) -}}
+  {{- $card := $base | images.Filter $titleFilter $markFilter -}}
+  {{- $card = $card | resources.Copy (printf "/og/%s.png" (path.Base .RelPermalink)) -}}
+  {{- $url = $card.Permalink -}}
+{{- end -}}
+{{- $url -}}
