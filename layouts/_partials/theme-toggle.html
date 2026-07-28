@@ -1,0 +1,8 @@
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle colour theme">theme</button>
+<script>
+document.querySelector("[data-theme-toggle]").addEventListener("click", function () {
+  var r = document.documentElement;
+  r.dataset.theme = r.dataset.theme === "dark" ? "light" : "dark";
+  try { localStorage.setItem("theme", r.dataset.theme); } catch (e) {}
+});
+</script>

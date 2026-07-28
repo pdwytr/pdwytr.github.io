@@ -5,10 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
   {{ partial "css.html" . }}
+  {{ partial "theme-init.html" . }}
 </head>
 <body>
   <div class="shell">
+    <header class="site-head">
+      <a class="site-head__name" href="{{ "/" | relURL }}">{{ site.Title }}</a>
+      {{ partial "nav.html" . }}
+    </header>
     {{ block "main" . }}{{ end }}
+    {{ partial "footer.html" . }}
   </div>
 </body>
 </html>
