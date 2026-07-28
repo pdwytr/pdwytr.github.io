@@ -89,3 +89,44 @@
   border-top: 1px solid var(--border);
 }
 .discuss h2 { font-family: var(--font-mono); font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-muted); }
+
+.cards { display: grid; gap: var(--space-4); }
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  background: var(--bg-elev);
+}
+.card__title { font-size: var(--step-1); margin: 0 0 var(--space-1); line-height: 1.2; }
+.card__title a { color: var(--fg); text-decoration: none; }
+.card__title a:hover { color: var(--accent); }
+.card__meta, .post__links {
+  font-family: var(--font-mono); font-size: var(--step--1); color: var(--fg-muted); margin: 0 0 var(--space-2);
+}
+.card__desc { margin: 0 0 var(--space-3); max-width: var(--measure); }
+.post__desc { font-size: var(--step-1); color: var(--fg-muted); max-width: var(--measure); margin: var(--space-2) 0 var(--space-3); }
+
+.metrics {
+  list-style: none; margin: 0 0 var(--space-3); padding: 0;
+  display: flex; flex-wrap: wrap; gap: var(--space-4);
+}
+.metric { display: flex; flex-direction: column; }
+.metric__value {
+  font-family: var(--font-mono); font-size: var(--step-1); font-weight: 700;
+  color: var(--accent-2); font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+.metric__label {
+  font-family: var(--font-mono); font-size: var(--step--1); color: var(--fg-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+
+.stack {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-2);
+}
+.stack li {
+  font-family: var(--font-mono); font-size: var(--step--1); color: var(--fg-muted);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 0 var(--space-2);
+}

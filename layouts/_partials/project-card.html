@@ -1,0 +1,10 @@
+<article class="card">
+  <h3 class="card__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+  <p class="card__meta">
+    {{ .Params.role }}{{ with .Params.org }} · {{ . }}{{ end }}
+    <span class="sep">·</span>{{ .Params.period.start }}–{{ .Params.period.end | default "present" }}
+  </p>
+  <p class="card__desc">{{ .Params.description }}</p>
+  {{ partial "metrics.html" . }}
+  <ul class="stack">{{ range .Params.stack }}<li>{{ . }}</li>{{ end }}</ul>
+</article>

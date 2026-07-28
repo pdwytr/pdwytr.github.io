@@ -1,0 +1,9 @@
+{{ define "main" }}
+  <header class="section-head">
+    <h1><span class="prompt">$</span> ls projects/</h1>
+    <p class="section-head__desc">{{ .Params.description }}</p>
+  </header>
+  <div class="cards">
+    {{ range .RegularPagesRecursive.ByWeight }}{{ partial "project-card.html" . }}{{ end }}
+  </div>
+{{ end }}
