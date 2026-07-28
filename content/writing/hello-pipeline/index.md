@@ -8,3 +8,6 @@ draft: false
 ---
 
 Opening paragraph — state the claim before the setup.
+
+![A gradient standing in for a real diagram](diagram.png "Fig 1 — placeholder")
+

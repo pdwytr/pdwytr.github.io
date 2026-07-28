@@ -1,0 +1,11 @@
+{{- with .Page.Resources.GetMatch .Destination -}}
+  {{- $img := .Resize "1200x webp q82" -}}
+  <figure>
+    <img src="{{ $img.RelPermalink }}"
+         width="{{ $img.Width }}" height="{{ $img.Height }}"
+         alt="{{ $.Text }}" loading="lazy" decoding="async">
+    {{- with $.Title }}<figcaption>{{ . }}</figcaption>{{ end -}}
+  </figure>
+{{- else -}}
+  <img src="{{ .Destination }}" alt="{{ .Text }}" loading="lazy" decoding="async">
+{{- end -}}
