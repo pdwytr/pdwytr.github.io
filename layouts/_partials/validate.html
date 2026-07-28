@@ -7,9 +7,9 @@
   {{- if .Date.IsZero }}{{ errorf "frontmatter: missing or unparseable 'date' in %s" $f }}{{ end -}}
 
   {{- if eq .Section "writing" -}}
-    {{- $kind := .Params.kind | default "" -}}
+    {{- $kind := .Params.postKind | default "" -}}
     {{- if not (in (slice "essay" "note") $kind) -}}
-      {{- errorf "frontmatter: 'kind' must be \"essay\" or \"note\", got %q in %s" $kind $f -}}
+      {{- errorf "frontmatter: 'postKind' must be \"essay\" or \"note\", got %q in %s" $kind $f -}}
     {{- end -}}
   {{- else -}}
     {{- range slice "role" "period" "stack" -}}
