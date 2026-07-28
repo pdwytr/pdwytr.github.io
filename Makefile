@@ -1,7 +1,7 @@
 HUGO_VERSION := $(shell cat .hugoversion)
 BASEURL := https://moknshaik.com/
 
-.PHONY: help serve build new project check clean fonts
+.PHONY: help serve build new project check clean fonts chroma
 
 help:
 	@echo "make serve              live preview with drafts  -> http://localhost:1313"
@@ -47,3 +47,13 @@ fonts:
 	  "https://github.com/JetBrains/JetBrainsMono/releases/download/$(JBM_TTF_TAG)/JetBrainsMono-2.304.zip"
 	unzip -o -j /tmp/jbm.zip "fonts/ttf/JetBrainsMono-Bold.ttf" -d assets/fonts/
 	@ls -la assets/fonts/
+
+.PHONY: chroma
+chroma:
+	printf ':root, :root[data-theme="dark"] {\n' > assets/css/code-dark.css
+	hugo gen chromastyles --style=github-dark >> assets/css/code-dark.css
+	printf '}\n' >> assets/css/code-dark.css
+	printf ':root[data-theme="light"] {\n' > assets/css/code-light.css
+	hugo gen chromastyles --style=github >> assets/css/code-light.css
+	printf '}\n' >> assets/css/code-light.css
+	@wc -l assets/css/code-dark.css assets/css/code-light.css

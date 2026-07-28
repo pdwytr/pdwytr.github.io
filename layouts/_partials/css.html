@@ -2,6 +2,8 @@
       (resources.Get "css/tokens.css")
       (resources.Get "css/base.css")
       (resources.Get "css/layout.css")
+      (resources.Get "css/code-dark.css")
+      (resources.Get "css/code-light.css")
     | resources.Concat "css/site.css" -}}
 {{- if hugo.IsProduction -}}
   {{- $css = $css | minify | fingerprint -}}
