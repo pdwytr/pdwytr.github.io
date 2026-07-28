@@ -1,0 +1,54 @@
+.prose {
+  max-width: var(--measure);
+}
+.prose > * + * { margin-top: var(--space-3); }
+
+.prose h2, .prose h3, .prose h4 {
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-2);
+}
+.prose h2 { font-size: var(--step-2); }
+.prose h3 { font-size: var(--step-1); }
+.prose h4 { font-size: var(--step-0); text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-muted); font-family: var(--font-mono); }
+
+.prose blockquote {
+  margin: var(--space-4) 0;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--accent);
+  color: var(--fg-muted);
+}
+
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li + li { margin-top: var(--space-1); }
+
+.prose :not(pre) > code {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.1em 0.35em;
+}
+
+.prose pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  overflow-x: auto;
+  line-height: 1.5;
+}
+.prose pre code { background: none; border: 0; padding: 0; }
+
+.prose table { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+.prose th, .prose td { text-align: left; padding: var(--space-2); border-bottom: 1px solid var(--border); }
+.prose th { font-family: var(--font-mono); font-weight: 700; color: var(--fg-muted); }
+
+.prose figure { margin: var(--space-4) 0; }
+.prose figure img { border: 1px solid var(--border); border-radius: var(--radius); display: block; }
+.prose figcaption {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--fg-muted);
+}
