@@ -1115,7 +1115,9 @@ Phase 1 gate: the styleguide renders correctly in both themes with zero external
 
 **Interfaces:**
 - Consumes: nothing from Phase 1
-- Produces: the post frontmatter contract — `title`, `description`, `date`, `kind` (`essay`|`note`), optional `lastmod`, `tags`, `cover`, `discuss`, `draft`. `partial "validate.html" .` aborts the build via `errorf` when the contract is broken.
+- Produces: the post frontmatter contract — `title`, `description`, `date`, `postKind` (`essay`|`note`), optional `lastmod`, `tags`, `cover`, `discuss`, `draft`. `partial "validate.html" .` aborts the build via `errorf` when the contract is broken.
+
+⚠️ **Amendment (post-Task-8 discovery):** the spec's original field name was `kind`, but Hugo 0.144.0 deprecated and later *removed* `kind` as a front matter key — it collides with Hugo's own page-kind mechanism (`.Kind`: home/page/section/taxonomy/term). Any content file setting `kind:` at all makes Hugo 0.164.0 hard-error the build (`ERROR deprecated: kind in front matter was deprecated in Hugo v0.144.0 and subsequently removed.`), independent of the value or of this task's own `validate.html` logic. Renamed to `postKind` everywhere below (archetype, validation partial, and every later task that reads `.Params.kind`) before this defect could propagate into Tasks 9, 15, and 18.
 
 - [ ] **Step 1: Write the archetype**
 
@@ -1126,7 +1128,7 @@ Phase 1 gate: the styleguide renders correctly in both themes with zero external
 title: "{{ replace .File.ContentBaseName "-" " " | title }}"
 description: ""
 date: {{ .Date }}
-kind: essay
+postKind: essay
 tags: []
 draft: true
 ---
@@ -1152,14 +1154,14 @@ make new S=hello-pipeline
 cat content/writing/hello-pipeline/index.md
 ```
 
-Expected: frontmatter with `title: "Hello Pipeline"`, `kind: essay`, `draft: true`, and today's date.
+Expected: frontmatter with `title: "Hello Pipeline"`, `postKind: essay`, `draft: true`, and today's date.
 
 - [ ] **Step 4: Write the failing validation test**
 
 Deliberately break the post, then assert the build refuses it:
 
 ```bash
-sed -i '' 's/^kind: essay$/kind: rambling/' content/writing/hello-pipeline/index.md
+sed -i '' 's/^postKind: essay$/postKind: rambling/' content/writing/hello-pipeline/index.md
 sed -i '' 's/^draft: true$/draft: false/' content/writing/hello-pipeline/index.md
 make build; echo "exit=$?"
 ```
@@ -1178,9 +1180,9 @@ Expected: `exit=0` — the build currently accepts invalid frontmatter. That is 
   {{- if .Date.IsZero }}{{ errorf "frontmatter: missing or unparseable 'date' in %s" $f }}{{ end -}}
 
   {{- if eq .Section "writing" -}}
-    {{- $kind := .Params.kind | default "" -}}
+    {{- $kind := .Params.postKind | default "" -}}
     {{- if not (in (slice "essay" "note") $kind) -}}
-      {{- errorf "frontmatter: 'kind' must be \"essay\" or \"note\", got %q in %s" $kind $f -}}
+      {{- errorf "frontmatter: 'postKind' must be \"essay\" or \"note\", got %q in %s" $kind $f -}}
     {{- end -}}
   {{- else -}}
     {{- range slice "role" "period" "stack" -}}
@@ -1208,12 +1210,12 @@ Add as the first line of the file, before `<!doctype html>`:
 make build; echo "exit=$?"
 ```
 
-Expected: non-zero exit, with an error naming `content/writing/hello-pipeline/index.md` and mentioning `kind`.
+Expected: non-zero exit, with an error naming `content/writing/hello-pipeline/index.md` and mentioning `postKind`.
 
 - [ ] **Step 8: Verify the missing-description path too**
 
 ```bash
-sed -i '' 's/^kind: rambling$/kind: essay/' content/writing/hello-pipeline/index.md
+sed -i '' 's/^postKind: rambling$/postKind: essay/' content/writing/hello-pipeline/index.md
 make build; echo "exit=$?"
 ```
 
@@ -1264,7 +1266,7 @@ Titles are the visible row label — the listing aesthetic comes from monospace 
 <li class="row">
   <time class="row__date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
   <a class="row__title" href="{{ .RelPermalink }}">{{ .Title }}</a>
-  <span class="row__kind">[{{ .Params.kind }}]</span>
+  <span class="row__kind">[{{ .Params.postKind }}]</span>
 </li>
 ```
 
@@ -1299,7 +1301,7 @@ Titles are the visible row label — the listing aesthetic comes from monospace 
       <p class="post__meta">
         <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 Jan 2006" }}</time>
         <span class="sep">·</span>{{ .ReadingTime }} min
-        <span class="sep">·</span>[{{ .Params.kind }}]
+        <span class="sep">·</span>[{{ .Params.postKind }}]
         {{ with .Lastmod }}{{ if gt (sub .Unix $.Date.Unix) 86400 }}
           <span class="sep">·</span>updated {{ .Format "2 Jan 2006" }}
         {{ end }}{{ end }}
@@ -2681,7 +2683,7 @@ Set the frontmatter to:
 title: "The Real Leverage Problem: AI in Software Development"
 description: "The hardest problem in applying AI isn't capability — it's classifying which problems are probabilistic and which are deterministic."
 date: 2026-07-27
-kind: essay
+postKind: essay
 tags: ["ai", "software-engineering", "architecture"]
 draft: false
 ---
@@ -2711,7 +2713,7 @@ Create `content/writing/essentials-of-production-python/index.html` with frontma
 title: "Essentials of Production in Python Applications"
 description: "Poetry, Pylint, semantic versioning, and package management — the unglamorous parts that decide whether Python code survives production."
 date: 2026-07-27
-kind: note
+postKind: note
 tags: ["python", "tooling"]
 draft: false
 ---
