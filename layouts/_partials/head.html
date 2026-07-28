@@ -39,3 +39,16 @@
   -}}
   <script type="application/ld+json">{{ $ld | jsonify | safeJS }}</script>
 {{- end -}}
+
+{{- if or .IsHome (in (slice "/about/" "/resume/") .RelPermalink) -}}
+  {{- $person := dict
+        "@context" "https://schema.org"
+        "@type" "Person"
+        "name" site.Params.author
+        "url" (absURL "/")
+        "email" site.Params.email
+        "jobTitle" "Application Engineer"
+        "sameAs" (slice site.Params.github site.Params.linkedin)
+  -}}
+  <script type="application/ld+json">{{ $person | jsonify | safeJS }}</script>
+{{- end -}}
