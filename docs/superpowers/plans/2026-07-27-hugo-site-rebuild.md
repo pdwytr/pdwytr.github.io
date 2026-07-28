@@ -1693,8 +1693,18 @@ Per-page OG images arrive in Task 12; this task wires the site-wide fallback so 
         "image" $og
         "author" (dict "@type" "Person" "name" site.Params.author "url" (absURL "/about/"))
   -}}
-  <script type="application/ld+json">{{ $ld | jsonify }}</script>
+  <script type="application/ld+json">{{ $ld | jsonify | safeJS }}</script>
 {{- end -}}
+
+⚠️ **Amendment (post-Task-11 discovery):** `{{ $ld | jsonify }}` alone is not enough here — Go's
+`html/template` applies contextual JS auto-escaping inside a `<script>` block, and an unmarked
+string gets wrapped in an extra pair of quotes with internal quotes backslash-escaped. The
+result renders as a JSON **string literal**, not a JSON **object**, so every JSON-LD consumer
+(Google Rich Results, `JSON.parse`, schema.org validators) fails to parse it as structured data.
+`| safeJS` marks the pipeline's output as already-safe JS so Hugo emits the raw object. The same
+fix applies to Task 17's `Person` JSON-LD block below, which uses the identical `{{ ... | jsonify }}`
+pattern. (`layouts/home.json.json`'s `jsonify` call is unaffected — that's Hugo's `json` *output
+format*, not HTML embedding, so the auto-escaper never runs on it.)
 ```
 
 - [ ] **Step 7: Replace the head block in `layouts/baseof.html`**
@@ -2606,7 +2616,7 @@ Append, after the existing `BlogPosting` block:
         "jobTitle" "Application Engineer"
         "sameAs" (slice site.Params.github site.Params.linkedin)
   -}}
-  <script type="application/ld+json">{{ $person | jsonify }}</script>
+  <script type="application/ld+json">{{ $person | jsonify | safeJS }}</script>
 {{- end -}}
 ```
 
