@@ -1,0 +1,28 @@
+{{ define "main" }}
+  <article class="prose post">
+    <header class="post__head">
+      <h1>{{ .Title }}</h1>
+      <p class="post__meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 Jan 2006" }}</time>
+        <span class="sep">·</span>{{ .ReadingTime }} min
+        <span class="sep">·</span>[{{ .Params.postKind }}]
+        {{ with .Lastmod }}{{ if gt (sub .Unix $.Date.Unix) 86400 }}
+          <span class="sep">·</span>updated {{ .Format "2 Jan 2006" }}
+        {{ end }}{{ end }}
+      </p>
+      {{ with .Params.tags }}
+        <p class="post__tags">{{ range . }}<a href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">#{{ . }}</a> {{ end }}</p>
+      {{ end }}
+    </header>
+
+    {{ .Content }}
+
+    {{ with .Params.discuss }}
+      <aside class="discuss">
+        <h2>Discussion</h2>
+        <p>This post is being discussed at:</p>
+        <ul>{{ range . }}<li><a href="{{ .href }}">{{ .label }}</a></li>{{ end }}</ul>
+      </aside>
+    {{ end }}
+  </article>
+{{ end }}

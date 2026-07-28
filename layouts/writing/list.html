@@ -1,0 +1,16 @@
+{{ define "main" }}
+  <header class="section-head">
+    <h1><span class="prompt">$</span> ls writing/</h1>
+    <p class="section-head__desc">{{ .Params.description }}</p>
+  </header>
+
+  {{ $byYear := .RegularPagesRecursive.GroupByDate "2006" }}
+  {{ range $byYear }}
+    <section class="year">
+      <h2 class="year__label">{{ .Key }}</h2>
+      <ul class="rows">
+        {{ range .Pages }}{{ partial "post-row.html" . }}{{ end }}
+      </ul>
+    </section>
+  {{ end }}
+{{ end }}
