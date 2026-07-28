@@ -1,0 +1,21 @@
+{{- if and (eq .Kind "page") (in (slice "writing" "projects") .Section) -}}
+  {{- $f := "unknown file" -}}
+  {{- with .File }}{{ $f = .Filename }}{{ end -}}
+
+  {{- if not .Title }}{{ errorf "frontmatter: missing 'title' in %s" $f }}{{ end -}}
+  {{- if not .Params.description }}{{ errorf "frontmatter: missing 'description' in %s" $f }}{{ end -}}
+  {{- if .Date.IsZero }}{{ errorf "frontmatter: missing or unparseable 'date' in %s" $f }}{{ end -}}
+
+  {{- if eq .Section "writing" -}}
+    {{- $kind := .Params.kind | default "" -}}
+    {{- if not (in (slice "essay" "note") $kind) -}}
+      {{- errorf "frontmatter: 'kind' must be \"essay\" or \"note\", got %q in %s" $kind $f -}}
+    {{- end -}}
+  {{- else -}}
+    {{- range slice "role" "period" "stack" -}}
+      {{- if not (index $.Params .) -}}
+        {{- errorf "frontmatter: missing '%s' in %s" . $f -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
