@@ -1,7 +1,7 @@
 HUGO_VERSION := $(shell cat .hugoversion)
 BASEURL := https://moknshaik.com/
 
-.PHONY: help serve build new project check clean
+.PHONY: help serve build new project check clean fonts
 
 help:
 	@echo "make serve              live preview with drafts  -> http://localhost:1313"
@@ -30,3 +30,20 @@ project:
 
 clean:
 	rm -rf public resources/_gen
+
+FONTSOURCE := https://cdn.jsdelivr.net/npm
+JBM_TTF_TAG := v2.304
+
+.PHONY: fonts
+fonts:
+	mkdir -p assets/fonts
+	curl -sSLf -o assets/fonts/inter-latin-wght-normal.woff2 \
+	  "$(FONTSOURCE)/@fontsource-variable/inter@5.2.5/files/inter-latin-wght-normal.woff2"
+	curl -sSLf -o assets/fonts/jetbrains-mono-latin-400-normal.woff2 \
+	  "$(FONTSOURCE)/@fontsource/jetbrains-mono@5.2.5/files/jetbrains-mono-latin-400-normal.woff2"
+	curl -sSLf -o assets/fonts/jetbrains-mono-latin-700-normal.woff2 \
+	  "$(FONTSOURCE)/@fontsource/jetbrains-mono@5.2.5/files/jetbrains-mono-latin-700-normal.woff2"
+	curl -sSLf -o /tmp/jbm.zip \
+	  "https://github.com/JetBrains/JetBrainsMono/releases/download/$(JBM_TTF_TAG)/JetBrainsMono-2.304.zip"
+	unzip -o -j /tmp/jbm.zip "fonts/ttf/JetBrainsMono-Bold.ttf" -d assets/fonts/
+	@ls -la assets/fonts/
