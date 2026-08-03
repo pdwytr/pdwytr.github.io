@@ -6,9 +6,9 @@
         <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 Jan 2006" }}</time>
         <span class="sep">·</span>{{ .ReadingTime }} min
         <span class="sep">·</span>[{{ .Params.postKind }}]
-        {{ with .Lastmod }}{{ if gt (sub .Unix $.Date.Unix) 86400 }}
-          <span class="sep">·</span>updated {{ .Format "2 Jan 2006" }}
-        {{ end }}{{ end }}
+        {{ if ne .Lastmod.Unix .Date.Unix }}
+          <span class="sep">·</span>updated {{ .Lastmod.Format "2 Jan 2006" }}
+        {{ end }}
       </p>
       {{ with .Params.tags }}
         <p class="post__tags">{{ range . }}<a href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">#{{ . }}</a> {{ end }}</p>

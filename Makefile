@@ -50,7 +50,7 @@ fonts:
 
 .PHONY: chroma
 chroma:
-	printf ':root, :root[data-theme="dark"] {\n' > assets/css/code-dark.css
+	printf ':root:not([data-theme="light"]) {\n' > assets/css/code-dark.css
 	hugo gen chromastyles --style=github-dark >> assets/css/code-dark.css
 	printf '}\n' >> assets/css/code-dark.css
 	printf ':root[data-theme="light"] {\n' > assets/css/code-light.css

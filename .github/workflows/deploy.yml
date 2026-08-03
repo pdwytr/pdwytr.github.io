@@ -32,7 +32,7 @@ jobs:
           hugo version | tee /dev/stderr | grep -q extended
 
       - name: Build
-        run: hugo --gc --minify --baseURL "https://moknshaik.com/"
+        run: hugo --gc --minify --panicOnWarning --baseURL "https://moknshaik.com/"
 
       - uses: actions/setup-go@v5
         with:

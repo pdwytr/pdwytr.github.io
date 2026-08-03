@@ -41,13 +41,13 @@ tracking and dashboards, reducing team effort 80%.
 
 ## Skills
 
-**Languages** — Python, Bash, SQL
-**Frameworks & APIs** — FastAPI, React, REST, WebSocket, OpenAPI
-**Data** — PostgreSQL, pgvector, Apache Airflow, pandas
-**Testing** — pytest, unit/integration/e2e, AST static analysis
-**Infrastructure** — Docker, Kubernetes, AWS, Linux, Git
+- **Languages** — Python, Bash, SQL
+- **Frameworks & APIs** — FastAPI, React, REST, WebSocket, OpenAPI
+- **Data** — PostgreSQL, pgvector, Apache Airflow, pandas
+- **Testing** — pytest, unit/integration/e2e, AST static analysis
+- **Infrastructure** — Docker, Kubernetes, AWS, Linux, Git
 
 ## Education
 
-**M.S. Data Science** — University of Texas at Arlington, 2022
-**Post Graduate Diploma, Data Science** — INSOFE (CMU-accredited), 2020
+- **M.S. Data Science** — University of Texas at Arlington, 2022
+- **Post Graduate Diploma, Data Science** — INSOFE (CMU-accredited), 2020

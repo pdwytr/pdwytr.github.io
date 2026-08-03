@@ -21,7 +21,7 @@
 <meta name="twitter:description" content="{{ $desc | plainify | truncate 160 }}">
 <meta name="twitter:image" content="{{ $og }}">
 
-{{ with .OutputFormats.Get "rss" }}
+{{ with site.Home.OutputFormats.Get "rss" }}
   <link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">
 {{ end }}
 

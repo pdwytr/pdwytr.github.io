@@ -5,6 +5,15 @@ enableRobotsTXT = true
 enableGitInfo = true
 timeZone = "America/Chicago"
 
+# lastmod's default resolution order (when enableGitInfo is true) is
+# ["lastmod", ":git", "date", "publishdate"] — meaning .Lastmod silently
+# falls back to the file's last git-commit date on every page that doesn't
+# set `lastmod` in frontmatter, and churns on every unrelated commit. Drop
+# ":git" from the chain so .Lastmod only differs from .Date when a post's
+# frontmatter explicitly sets `lastmod`.
+[frontmatter]
+  lastmod = ["lastmod", "date"]
+
 # Only tags. Hugo's default also enables categories, which we do not want.
 [taxonomies]
   tag = "tags"

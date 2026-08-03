@@ -141,7 +141,7 @@ Exactly one inline script, roughly 15 lines with no dependencies: read the store
 | `lastmod` | date | no | Rendered as "updated" when present |
 | `tags` | []string | no | Drives `/tags/<tag>/` |
 | `postKind` | `essay` \| `note` | yes | The `[essay]` / `[note]` label in listings. Named `postKind`, not `kind` — Hugo 0.144+ reserves/removes `kind` in front matter (it collides with the built-in page-kind mechanism). |
-| `cover` | string | no | Filename within the bundle; used for OG card and post header |
+| `cover` | string | no | Filename within the bundle; used for OG card and post header. **Not implemented** — deferred/future enhancement |
 | `discuss` | []{label, href} | no | Links to the Reddit / LinkedIn / X thread after sharing |
 | `draft` | bool | no | Defaults false |
 
