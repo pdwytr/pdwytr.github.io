@@ -9,6 +9,16 @@ timeZone = "America/Chicago"
 [taxonomies]
   tag = "tags"
 
+# Hugo 0.162+ denies text/html content files by default (CVE-2026-50133,
+# raw-HTML-content-file XSS hardening), and overriding allowContent replaces
+# the whole list rather than extending it — so text/markdown (our normal
+# content format) must be re-listed alongside it. We hand-author every
+# content file ourselves (no untrusted/CMS input), so both are safe to opt
+# back in. This is what lets content/writing/essentials-of-production-python/
+# index.html render at all.
+[security]
+  allowContent = ['^text/html$', '^text/markdown$']
+
 [markup.goldmark.renderer]
   unsafe = true          # allow raw HTML inside markdown
 

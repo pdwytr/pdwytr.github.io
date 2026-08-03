@@ -1,4 +1,11 @@
-# The Real Leverage Problem: AI in Software Development
+---
+title: "The Real Leverage Problem: AI in Software Development"
+description: "The hardest problem in applying AI isn't capability — it's classifying which problems are probabilistic and which are deterministic."
+date: 2026-07-27
+postKind: essay
+tags: ["ai", "software-engineering", "architecture"]
+draft: false
+---
 
 The hardest problem in applying AI isn't capability — it's classification. Specifically, identifying which problems are **probabilistic** versus **deterministic**, and then among the probabilistic ones, which are worth the cost of AI involvement.
 
