@@ -2712,6 +2712,27 @@ Expected: `1`.
 
 - [ ] **Step 4: Migrate the Python article as HTML, exercising that content path**
 
+⚠️ **Amendment (discovered during Task 18):** this step cannot work on the pinned Hugo without a
+config change the plan originally omitted. Hugo 0.162.0 fixed
+[CVE-2026-50133](https://github.com/advisories/GHSA-c54g-xjwj-8g82) (stored XSS via `text/html`
+content files) by introducing a `security.allowContent` allowlist whose default —
+`allowContent = ['! ^text/html$']` — **denies `text/html` content files outright**. Without an
+override the build hard-fails with `access denied: "text/html" is not whitelisted in policy
+"security.allowContent"`. Because overriding replaces the list rather than extending it,
+`text/markdown` must be re-listed alongside it. Add to `hugo.toml`:
+
+```toml
+[security]
+  allowContent = ['^text/html$', '^text/markdown$']
+```
+
+The CVE concerns sites that *ingest HTML from untrusted sources*; every content file here is
+hand-authored and committed by the site owner, and the site already sets
+`[markup.goldmark.renderer] unsafe = true` (raw HTML inside markdown), so opting back in adds no
+materially new exposure. Note this allowlist is *narrower* than Hugo's default for every other
+format — asciidoc, org, pandoc, and rst content files are now denied, which is correct for a site
+that only authors `.md` and `.html`.
+
 ```bash
 mkdir -p content/writing/essentials-of-production-python
 ```
