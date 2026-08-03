@@ -41,7 +41,7 @@ tracking and dashboards, reducing team effort 80%.
 
 ## Skills
 
-**Languages** — Python, Bash, SQL, Go
+**Languages** — Python, Bash, SQL
 **Frameworks & APIs** — FastAPI, React, REST, WebSocket, OpenAPI
 **Data** — PostgreSQL, pgvector, Apache Airflow, pandas
 **Testing** — pytest, unit/integration/e2e, AST static analysis
