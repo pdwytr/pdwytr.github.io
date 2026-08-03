@@ -1,0 +1,9 @@
+{
+  "name": "Mohammed Khalid Shaik",
+  "short_name": "moknshaik",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }],
+  "theme_color": "#0d1117",
+  "background_color": "#0d1117",
+  "display": "browser",
+  "start_url": "/"
+}

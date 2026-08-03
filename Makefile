@@ -70,3 +70,8 @@ test:
 
 verify: build
 	go run ./tools/verify -public public
+
+check: build
+	go test ./tools/...
+	go run ./tools/verify -public public
+	lychee --no-progress --offline --root-dir "$(PWD)/public" public
