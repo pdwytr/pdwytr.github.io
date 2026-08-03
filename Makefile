@@ -63,3 +63,10 @@ ogbase:
 	mkdir -p assets/og
 	go run ./tools/ogbase -out assets/og/base.png
 	go run ./tools/ogbase -out static/og-default.png
+
+.PHONY: verify test
+test:
+	go test ./tools/...
+
+verify: build
+	go run ./tools/verify -public public
