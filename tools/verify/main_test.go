@@ -12,7 +12,7 @@ func TestHomepageProblemsRequiresCompleteWritingList(t *testing.T) {
 	for _, want := range []string{
 		"writing list missing",
 		"featured projects still present",
-		"case studies navigation missing",
+		"case-studies navigation missing",
 		"projects navigation still present",
 		"GitHub social link missing",
 		"X (Twitter) social link missing",
@@ -30,7 +30,7 @@ func TestHomepageProblemsAcceptsFocusedHomepageControls(t *testing.T) {
 		<a href="https://github.com/pdwytr" aria-label="GitHub"></a>
 		<a href="https://x.com/pdwytrfa" aria-label="X (Twitter)"></a>
 		<a href="https://www.linkedin.com/in/pdwytr/" aria-label="LinkedIn"></a>
-		<nav><a href="/projects/">case studies</a></nav>
+		<nav><a href="/projects/">case-studies</a></nav>
 		<h2>$ ls writing/</h2>
 		<button role="switch" aria-checked="true" aria-label="Switch to light theme"></button>
 	</main>`)
@@ -43,7 +43,7 @@ func TestHomepageProblemsAcceptsFocusedHomepageControls(t *testing.T) {
 func TestHomepageProblemsRejectsSocialURLsOutsideAccessibleAnchors(t *testing.T) {
 	html := []byte(`<main>
 		<script type="application/ld+json">{"sameAs":["https://github.com/pdwytr","https://x.com/pdwytrfa","https://www.linkedin.com/in/pdwytr/"]}</script>
-		<nav><a href="/projects/">case studies</a></nav>
+		<nav><a href="/projects/">case-studies</a></nav>
 		<h2>$ ls writing/</h2>
 		<button role="switch" aria-checked="true" aria-label="Dark theme"></button>
 	</main>`)

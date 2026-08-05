@@ -135,7 +135,7 @@ func homepageProblems(body []byte) []string {
 		problem string
 	}{
 		{"$ ls writing/", "homepage: writing list missing"},
-		{">case studies</a>", "homepage: case studies navigation missing"},
+		{">case-studies</a>", "homepage: case-studies navigation missing"},
 		{`role="switch"`, "homepage: theme switch missing"},
 		{`aria-checked=`, "homepage: theme switch state missing"},
 	}
