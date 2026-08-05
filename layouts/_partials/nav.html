@@ -1,5 +1,5 @@
 <nav>
-  {{ range slice (slice "writing" "/writing/") (slice "projects" "/projects/") (slice "résumé" "/resume/") (slice "about" "/about/") }}
+  {{ range slice (slice "writing" "/writing/") (slice "case studies" "/projects/") (slice "résumé" "/resume/") (slice "about" "/about/") }}
     {{ $label := index . 0 }}{{ $url := index . 1 }}
     <a href="{{ $url | relURL }}"{{ if hasPrefix $.RelPermalink $url }} aria-current="page"{{ end }}>{{ $label }}</a>
   {{ end }}

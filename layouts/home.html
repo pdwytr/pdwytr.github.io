@@ -20,13 +20,17 @@
     </div>
   </section>
 
-  {{ with where (where site.RegularPages "Section" "projects") "Params.featured" true }}
+  {{ with where site.RegularPages "Section" "writing" }}
     <section class="home-block">
-      <h2 class="home-block__label"><span class="prompt">$</span> ls projects/ --featured</h2>
-      <div class="cards">
-        {{ range .ByWeight }}{{ partial "project-card.html" . }}{{ end }}
-      </div>
-      <p class="home-block__more"><a href="{{ "/projects/" | relURL }}">all projects →</a></p>
+      <h2 class="home-block__label"><span class="prompt">$</span> ls writing/</h2>
+      {{ range .GroupByDate "2006" }}
+        <section class="year">
+          <h3 class="year__label">{{ .Key }}</h3>
+          <ul class="rows">
+            {{ range .Pages }}{{ partial "post-row.html" . }}{{ end }}
+          </ul>
+        </section>
+      {{ end }}
     </section>
   {{ end }}
 {{ end }}

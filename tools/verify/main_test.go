@@ -5,13 +5,15 @@ import (
 	"testing"
 )
 
-func TestHomepageProblemsRequiresFocusedHomepageControls(t *testing.T) {
-	html := []byte(`<main><h2>$ ls -t writing/ | head -3</h2></main>`)
+func TestHomepageProblemsRequiresCompleteWritingList(t *testing.T) {
+	html := []byte(`<nav><a href="/projects/">projects</a></nav><main><h2>$ ls projects/ --featured</h2></main>`)
 	problems := strings.Join(homepageProblems(html), "\n")
 
 	for _, want := range []string{
-		"featured projects command missing",
-		"recent writing block still present",
+		"writing list missing",
+		"featured projects still present",
+		"case studies navigation missing",
+		"projects navigation still present",
 		"GitHub social link missing",
 		"X (Twitter) social link missing",
 		"LinkedIn social link missing",
@@ -28,7 +30,8 @@ func TestHomepageProblemsAcceptsFocusedHomepageControls(t *testing.T) {
 		<a href="https://github.com/pdwytr" aria-label="GitHub"></a>
 		<a href="https://x.com/pdwytrfa" aria-label="X (Twitter)"></a>
 		<a href="https://www.linkedin.com/in/pdwytr/" aria-label="LinkedIn"></a>
-		<h2>$ ls projects/ --featured</h2>
+		<nav><a href="/projects/">case studies</a></nav>
+		<h2>$ ls writing/</h2>
 		<button role="switch" aria-checked="true" aria-label="Switch to light theme"></button>
 	</main>`)
 
@@ -40,7 +43,8 @@ func TestHomepageProblemsAcceptsFocusedHomepageControls(t *testing.T) {
 func TestHomepageProblemsRejectsSocialURLsOutsideAccessibleAnchors(t *testing.T) {
 	html := []byte(`<main>
 		<script type="application/ld+json">{"sameAs":["https://github.com/pdwytr","https://x.com/pdwytrfa","https://www.linkedin.com/in/pdwytr/"]}</script>
-		<h2>$ ls projects/ --featured</h2>
+		<nav><a href="/projects/">case studies</a></nav>
+		<h2>$ ls writing/</h2>
 		<button role="switch" aria-checked="true" aria-label="Dark theme"></button>
 	</main>`)
 	problems := strings.Join(homepageProblems(html), "\n")

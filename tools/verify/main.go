@@ -134,7 +134,8 @@ func homepageProblems(body []byte) []string {
 		text    string
 		problem string
 	}{
-		{"$ ls projects/ --featured", "homepage: featured projects command missing"},
+		{"$ ls writing/", "homepage: writing list missing"},
+		{">case studies</a>", "homepage: case studies navigation missing"},
 		{`role="switch"`, "homepage: theme switch missing"},
 		{`aria-checked=`, "homepage: theme switch state missing"},
 	}
@@ -155,8 +156,11 @@ func homepageProblems(body []byte) []string {
 			problems = append(problems, fmt.Sprintf("homepage: %s social link missing", social.label))
 		}
 	}
-	if strings.Contains(html, "$ ls -t writing/") {
-		problems = append(problems, "homepage: recent writing block still present")
+	if strings.Contains(html, "$ ls projects/ --featured") {
+		problems = append(problems, "homepage: featured projects still present")
+	}
+	if strings.Contains(html, ">projects</a>") {
+		problems = append(problems, "homepage: projects navigation still present")
 	}
 	return problems
 }
