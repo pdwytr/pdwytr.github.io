@@ -6,12 +6,7 @@
   {{- if not .Params.description }}{{ errorf "frontmatter: missing 'description' in %s" $f }}{{ end -}}
   {{- if .Date.IsZero }}{{ errorf "frontmatter: missing or unparseable 'date' in %s" $f }}{{ end -}}
 
-  {{- if eq .Section "writing" -}}
-    {{- $kind := .Params.postKind | default "" -}}
-    {{- if not (in (slice "essay" "note") $kind) -}}
-      {{- errorf "frontmatter: 'postKind' must be \"essay\" or \"note\", got %q in %s" $kind $f -}}
-    {{- end -}}
-  {{- else -}}
+  {{- if eq .Section "projects" -}}
     {{- range slice "role" "period" "stack" -}}
       {{- if not (index $.Params .) -}}
         {{- errorf "frontmatter: missing '%s' in %s" . $f -}}

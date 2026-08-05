@@ -12,6 +12,7 @@
   <div class="shell">
     <header class="site-head">
       <a class="site-head__name" href="{{ "/" | relURL }}">{{ site.Title }}</a>
+      {{ partial "theme-toggle.html" . }}
       {{ partial "nav.html" . }}
     </header>
     {{ block "main" . }}{{ end }}

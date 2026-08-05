@@ -2,7 +2,6 @@
 title: "{{ replace .File.ContentBaseName "-" " " | title }}"
 description: ""
 date: {{ .Date }}
-postKind: essay
 tags: []
 draft: true
 ---

@@ -48,7 +48,7 @@
         "url" (absURL "/")
         "email" site.Params.email
         "jobTitle" "Application Engineer"
-        "sameAs" (slice site.Params.github site.Params.linkedin)
+        "sameAs" (slice site.Params.github site.Params.twitter site.Params.linkedin)
   -}}
   <script type="application/ld+json">{{ $person | jsonify | safeJS }}</script>
 {{- end -}}

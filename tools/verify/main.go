@@ -83,6 +83,12 @@ func run(root string) ([]string, error) {
 		if strings.TrimSpace(p.Title) == "" {
 			problems = append(problems, fmt.Sprintf("%s: empty title in page index", p.URL))
 		}
+		if p.URL == "/" {
+			problems = append(problems, homepageProblems(body)...)
+		}
+		if p.Section == "writing" {
+			problems = append(problems, deprecatedClassificationProblems(body)...)
+		}
 
 		if p.OG == "" {
 			problems = append(problems, fmt.Sprintf("%s: no social card declared", p.URL))
@@ -96,6 +102,13 @@ func run(root string) ([]string, error) {
 		if st, err := os.Stat(og); err != nil || st.Size() == 0 {
 			problems = append(problems, fmt.Sprintf("%s: social card missing or empty at %s", p.URL, og))
 		}
+	}
+
+	writingIndex, err := os.ReadFile(filepath.Join(root, "writing", "index.html"))
+	if err != nil {
+		problems = append(problems, "writing index missing from build output")
+	} else {
+		problems = append(problems, deprecatedClassificationProblems(writingIndex)...)
 	}
 
 	cname, err := os.ReadFile(filepath.Join(root, "CNAME"))
@@ -112,6 +125,55 @@ func run(root string) ([]string, error) {
 	}
 
 	return problems, nil
+}
+
+func homepageProblems(body []byte) []string {
+	html := string(body)
+	var problems []string
+	required := []struct {
+		text    string
+		problem string
+	}{
+		{"$ ls projects/ --featured", "homepage: featured projects command missing"},
+		{`role="switch"`, "homepage: theme switch missing"},
+		{`aria-checked=`, "homepage: theme switch state missing"},
+	}
+	for _, requirement := range required {
+		if !strings.Contains(html, requirement.text) {
+			problems = append(problems, requirement.problem)
+		}
+	}
+	for _, social := range []struct {
+		url   string
+		label string
+	}{
+		{"https://github.com/pdwytr", "GitHub"},
+		{"https://x.com/pdwytrfa", "X (Twitter)"},
+		{"https://www.linkedin.com/in/pdwytr/", "LinkedIn"},
+	} {
+		if !hasSocialLink(html, social.url, social.label) {
+			problems = append(problems, fmt.Sprintf("homepage: %s social link missing", social.label))
+		}
+	}
+	if strings.Contains(html, "$ ls -t writing/") {
+		problems = append(problems, "homepage: recent writing block still present")
+	}
+	return problems
+}
+
+func hasSocialLink(html, linkURL, label string) bool {
+	quotedURL := regexp.QuoteMeta(linkURL)
+	quotedLabel := regexp.QuoteMeta(label)
+	pattern := `(?is)<a\b[^>]*\bhref=(?:"` + quotedURL + `"|` + quotedURL + `)(?:\s|>)[^>]*\baria-label=(?:"` + quotedLabel + `"|` + quotedLabel + `)(?:\s|>)`
+	return regexp.MustCompile(pattern).MatchString(html)
+}
+
+func deprecatedClassificationProblems(body []byte) []string {
+	html := string(body)
+	if strings.Contains(html, "[essay]") || strings.Contains(html, "[note]") || strings.Contains(html, "row__kind") {
+		return []string{"writing: deprecated essay/note classification still rendered"}
+	}
+	return nil
 }
 
 // pagePathFor maps a site-relative page URL to its file on disk.
