@@ -2,6 +2,7 @@
 title: "Managed Analytics Platform"
 description: "A reconciliation service that drove isolated SAS Studio pods from database state, cutting secure provisioning from days to minutes."
 date: 2026-06-01
+tags: ["case-study"]
 period:
   start: "2023-05"
   end: "2025-03"

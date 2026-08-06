@@ -2,6 +2,7 @@
 title: "{{ replace .File.ContentBaseName "-" " " | title }}"
 description: ""
 date: {{ .Date }}
+tags: []
 period:
   start: ""
   end: ""
@@ -15,10 +16,4 @@ weight: 100
 draft: true
 ---
 
-## Problem
-
-## Constraints
-
-## Design
-
-## Outcome
+Opening paragraph — state the claim before the setup.

@@ -1,5 +1,5 @@
 <article class="card">
-  <h3 class="card__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+  <h2 class="card__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
   <p class="card__meta">
     {{ .Params.role }}{{ with .Params.org }} · {{ . }}{{ end }}
     <span class="sep">·</span>{{ .Params.period.start }}–{{ .Params.period.end | default "present" }}

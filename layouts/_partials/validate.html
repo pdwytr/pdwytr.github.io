@@ -1,4 +1,4 @@
-{{- if and (eq .Kind "page") (in (slice "writing" "projects") .Section) -}}
+{{- if and (eq .Kind "page") (eq .Section "blogs") -}}
   {{- $f := "unknown file" -}}
   {{- with .File }}{{ $f = .Filename }}{{ end -}}
 
@@ -6,7 +6,7 @@
   {{- if not .Params.description }}{{ errorf "frontmatter: missing 'description' in %s" $f }}{{ end -}}
   {{- if .Date.IsZero }}{{ errorf "frontmatter: missing or unparseable 'date' in %s" $f }}{{ end -}}
 
-  {{- if eq .Section "projects" -}}
+  {{- if in (.Params.tags | default (slice)) "case-study" -}}
     {{- range slice "role" "period" "stack" -}}
       {{- if not (index $.Params .) -}}
         {{- errorf "frontmatter: missing '%s' in %s" . $f -}}

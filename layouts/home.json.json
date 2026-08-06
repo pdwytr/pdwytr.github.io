@@ -1,9 +1,10 @@
 {{- $pages := slice -}}
-{{- range where site.RegularPages "Section" "in" (slice "writing" "projects") -}}
+{{- range where site.RegularPages "Section" "blogs" -}}
   {{- $pages = $pages | append (dict
         "url" .RelPermalink
         "title" .Title
         "og" (partial "og-image.html" .)
-        "section" .Section) -}}
+        "section" .Section
+        "caseStudy" (in (.Params.tags | default (slice)) "case-study")) -}}
 {{- end -}}
 {{- dict "count" (len $pages) "pages" $pages | jsonify (dict "indent" "  ") -}}

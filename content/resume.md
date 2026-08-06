@@ -17,27 +17,27 @@ and data systems.
 Production LLM agent runtime. Contributed YAML write-safety, canonical-hash
 trust verification, configurable memory controls, a CLI exit-code contract, and
 an AST-based CI check that blocks stub implementations.
-→ [Case study](/projects/llm-agent-runtime/)
+→ [Case study](/blogs/llm-agent-runtime/)
 
 #### Takeda — 07/2025 to 07/2026
 
 Built an eight-endpoint FastAPI service with bearer-token sessions, isolated
 storage, integrity checks, and asynchronous processing. Cut per-file processing
 from over fifteen minutes to under thirty seconds.
-→ [Case study](/projects/document-conversion-api/)
+→ [Case study](/blogs/document-conversion-api/)
 
 #### Integrated Analytics Solutions — 05/2023 to 03/2025
 
 Designed a Python service reconciling database requests with Kubernetes,
 managing the lifecycle of isolated analytics pods through explicit operational
 states. Provisioning went from days to minutes at ~1,000 concurrent users.
-→ [Case study](/projects/managed-analytics-platform/)
+→ [Case study](/blogs/managed-analytics-platform/)
 
 #### GameStop — 09/2022 to 05/2023
 
 Built an Airflow- and API-integrated approval workflow with database-backed
 tracking and dashboards, reducing team effort 80%.
-→ [Case study](/projects/promotion-approval-workflow/)
+→ [Case study](/blogs/promotion-approval-workflow/)
 
 ## Skills
 

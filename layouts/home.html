@@ -20,9 +20,9 @@
     </div>
   </section>
 
-  {{ with where site.RegularPages "Section" "writing" }}
+  {{ with where site.RegularPages "Section" "blogs" }}
     <section class="home-block">
-      <h2 class="home-block__label"><span class="prompt">$</span> ls writing/</h2>
+      <h2 class="home-block__label"><span class="prompt">$</span> ls blogs/</h2>
       {{ range .GroupByDate "2006" }}
         <section class="year">
           <h3 class="year__label">{{ .Key }}</h3>

@@ -23,7 +23,7 @@ timeZone = "America/Chicago"
 # the whole list rather than extending it — so text/markdown (our normal
 # content format) must be re-listed alongside it. We hand-author every
 # content file ourselves (no untrusted/CMS input), so both are safe to opt
-# back in. This is what lets content/writing/essentials-of-production-python/
+# back in. This is what lets content/blogs/essentials-of-production-python/
 # index.html render at all.
 [security]
   allowContent = ['^text/html$', '^text/markdown$']

@@ -2,6 +2,7 @@
 title: "Promotion Approval Workflow"
 description: "An Airflow-orchestrated approval pipeline with database-backed tracking that cut team effort 80% and about $200K a month in leakage."
 date: 2026-05-01
+tags: ["case-study"]
 period:
   start: "2022-09"
   end: "2023-05"

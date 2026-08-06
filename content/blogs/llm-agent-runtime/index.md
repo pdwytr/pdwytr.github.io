@@ -2,6 +2,7 @@
 title: "Production LLM Agent Runtime"
 description: "Trust and safety mechanics for an agent platform: canonical-hash verification, YAML write-safety, and a CI check that blocks stub implementations."
 date: 2026-07-20
+tags: ["case-study"]
 period:
   start: "2026-06"
   end: ""

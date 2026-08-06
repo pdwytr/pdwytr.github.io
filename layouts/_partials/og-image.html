@@ -3,7 +3,7 @@
 {{- $base := resources.Get "og/base.png" -}}
 {{- $font := resources.Get "fonts/JetBrainsMono-Bold.ttf" -}}
 
-{{- if and $base $font (eq .Kind "page") (in (slice "writing" "projects") .Section) -}}
+{{- if and $base $font (eq .Kind "page") (eq .Section "blogs") -}}
   {{- $title := partial "wrap-text.html" (dict "text" .Title "width" 26 "max" 3) -}}
   {{- $titleFilter := images.Text $title (dict
         "color" "#e6edf3"

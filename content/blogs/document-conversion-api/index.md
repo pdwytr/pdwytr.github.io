@@ -2,6 +2,7 @@
 title: "Enterprise Document Conversion API"
 description: "An eight-endpoint async service that took per-file processing from over fifteen minutes to under thirty seconds for about a thousand users."
 date: 2026-07-01
+tags: ["case-study"]
 period:
   start: "2025-07"
   end: "2026-07"

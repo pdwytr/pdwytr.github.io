@@ -15,14 +15,16 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 )
 
 type page struct {
-	URL     string `json:"url"`
-	Title   string `json:"title"`
-	OG      string `json:"og"`
-	Section string `json:"section"`
+	URL       string `json:"url"`
+	Title     string `json:"title"`
+	OG        string `json:"og"`
+	Section   string `json:"section"`
+	CaseStudy bool   `json:"caseStudy"`
 }
 
 type index struct {
@@ -31,6 +33,9 @@ type index struct {
 }
 
 var titleRe = regexp.MustCompile(`(?is)<title>(.*?)</title>`)
+var blogLinkRe = regexp.MustCompile(`href=["']?(/blogs/[^"'#?\s>]+/)["']?(?:\s|>)`)
+var blogsHeadingRe = regexp.MustCompile(`(?is)<h[1-6]\b[^>]*>.*?\$.*?ls\s+blogs/.*?</h[1-6]>`)
+var themeSwitchRe = regexp.MustCompile(`(?is)<button\b[^>]*\brole=(?:"switch"|'switch'|switch)(?:\s|>)`)
 
 func main() {
 	root := flag.String("public", "public", "path to the built site")
@@ -68,6 +73,14 @@ func run(root string) ([]string, error) {
 	}
 
 	var problems []string
+	problems = append(problems, articleIndexProblems(idx.Pages)...)
+
+	home, err := os.ReadFile(filepath.Join(root, "index.html"))
+	if err != nil {
+		problems = append(problems, "homepage missing from build output")
+	} else {
+		problems = append(problems, homepageProblems(home)...)
+	}
 
 	for _, p := range idx.Pages {
 		html := pagePathFor(root, p.URL)
@@ -83,13 +96,6 @@ func run(root string) ([]string, error) {
 		if strings.TrimSpace(p.Title) == "" {
 			problems = append(problems, fmt.Sprintf("%s: empty title in page index", p.URL))
 		}
-		if p.URL == "/" {
-			problems = append(problems, homepageProblems(body)...)
-		}
-		if p.Section == "writing" {
-			problems = append(problems, deprecatedClassificationProblems(body)...)
-		}
-
 		if p.OG == "" {
 			problems = append(problems, fmt.Sprintf("%s: no social card declared", p.URL))
 			continue
@@ -104,11 +110,24 @@ func run(root string) ([]string, error) {
 		}
 	}
 
-	writingIndex, err := os.ReadFile(filepath.Join(root, "writing", "index.html"))
+	blogsIndex, err := os.ReadFile(filepath.Join(root, "blogs", "index.html"))
 	if err != nil {
-		problems = append(problems, "writing index missing from build output")
+		problems = append(problems, "blogs index missing from build output")
 	} else {
-		problems = append(problems, deprecatedClassificationProblems(writingIndex)...)
+		problems = append(problems, listingProblems("blogs index", blogsIndex, idx.Pages)...)
+	}
+
+	var caseStudies []page
+	for _, p := range idx.Pages {
+		if p.CaseStudy {
+			caseStudies = append(caseStudies, p)
+		}
+	}
+	caseStudiesIndex, err := os.ReadFile(filepath.Join(root, "case-studies", "index.html"))
+	if err != nil {
+		problems = append(problems, "case-studies index missing from build output")
+	} else {
+		problems = append(problems, listingProblems("case-studies index", caseStudiesIndex, caseStudies)...)
 	}
 
 	cname, err := os.ReadFile(filepath.Join(root, "CNAME"))
@@ -134,15 +153,24 @@ func homepageProblems(body []byte) []string {
 		text    string
 		problem string
 	}{
-		{"$ ls writing/", "homepage: writing list missing"},
-		{">case-studies</a>", "homepage: case-studies navigation missing"},
-		{`role="switch"`, "homepage: theme switch missing"},
 		{`aria-checked=`, "homepage: theme switch state missing"},
 	}
 	for _, requirement := range required {
 		if !strings.Contains(html, requirement.text) {
 			problems = append(problems, requirement.problem)
 		}
+	}
+	if !blogsHeadingRe.MatchString(html) {
+		problems = append(problems, "homepage: blogs list missing")
+	}
+	if !themeSwitchRe.MatchString(html) {
+		problems = append(problems, "homepage: theme switch missing")
+	}
+	if !hasExactLink(html, "/blogs/", "blogs") {
+		problems = append(problems, "homepage: blogs navigation missing")
+	}
+	if !hasExactLink(html, "/case-studies/", "case-studies") {
+		problems = append(problems, "homepage: case-studies navigation missing")
 	}
 	for _, social := range []struct {
 		url   string
@@ -156,13 +184,14 @@ func homepageProblems(body []byte) []string {
 			problems = append(problems, fmt.Sprintf("homepage: %s social link missing", social.label))
 		}
 	}
-	if strings.Contains(html, "$ ls projects/ --featured") {
-		problems = append(problems, "homepage: featured projects still present")
-	}
-	if strings.Contains(html, ">projects</a>") {
-		problems = append(problems, "homepage: projects navigation still present")
-	}
 	return problems
+}
+
+func hasExactLink(html, linkURL, text string) bool {
+	quotedURL := regexp.QuoteMeta(linkURL)
+	quotedText := regexp.QuoteMeta(text)
+	pattern := `(?is)<a\b[^>]*\shref=(?:"` + quotedURL + `"|'` + quotedURL + `'|` + quotedURL + `)(?:\s[^>]*)?>\s*` + quotedText + `\s*</a\s*>`
+	return regexp.MustCompile(pattern).MatchString(html)
 }
 
 func hasSocialLink(html, linkURL, label string) bool {
@@ -172,12 +201,40 @@ func hasSocialLink(html, linkURL, label string) bool {
 	return regexp.MustCompile(pattern).MatchString(html)
 }
 
-func deprecatedClassificationProblems(body []byte) []string {
-	html := string(body)
-	if strings.Contains(html, "[essay]") || strings.Contains(html, "[note]") || strings.Contains(html, "row__kind") {
-		return []string{"writing: deprecated essay/note classification still rendered"}
+func articleIndexProblems(pages []page) []string {
+	var problems []string
+	for _, p := range pages {
+		if p.Section != "blogs" {
+			problems = append(problems, fmt.Sprintf("%s: article section is %q, want blogs", p.URL, p.Section))
+		}
 	}
-	return nil
+	return problems
+}
+
+func listingProblems(name string, body []byte, expected []page) []string {
+	expectedURLs := make(map[string]struct{})
+	for _, p := range expected {
+		expectedURLs[p.URL] = struct{}{}
+	}
+
+	actualURLs := make(map[string]struct{})
+	for _, match := range blogLinkRe.FindAllSubmatch(body, -1) {
+		actualURLs[string(match[1])] = struct{}{}
+	}
+
+	var problems []string
+	for u := range expectedURLs {
+		if _, ok := actualURLs[u]; !ok {
+			problems = append(problems, fmt.Sprintf("%s: missing %s", name, u))
+		}
+	}
+	for u := range actualURLs {
+		if _, ok := expectedURLs[u]; !ok {
+			problems = append(problems, fmt.Sprintf("%s: unexpected %s", name, u))
+		}
+	}
+	sort.Strings(problems)
+	return problems
 }
 
 // pagePathFor maps a site-relative page URL to its file on disk.

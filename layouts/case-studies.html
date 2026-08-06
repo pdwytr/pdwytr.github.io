@@ -3,7 +3,9 @@
     <h1><span class="prompt">$</span> ls case-studies/</h1>
     <p class="section-head__desc">{{ .Params.description }}</p>
   </header>
+  {{ $blogs := where site.RegularPages "Section" "blogs" }}
+  {{ $caseStudies := where $blogs "Params.tags" "intersect" (slice "case-study") }}
   <div class="cards">
-    {{ range .RegularPagesRecursive.ByWeight }}{{ partial "project-card.html" . }}{{ end }}
+    {{ range $caseStudies.ByWeight }}{{ partial "case-study-card.html" . }}{{ end }}
   </div>
 {{ end }}
