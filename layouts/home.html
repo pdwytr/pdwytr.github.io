@@ -20,7 +20,10 @@
     </div>
   </section>
 
-  {{ with where site.RegularPages "Section" "blogs" }}
+  {{/* Case studies are listed on /case-studies/, not under "ls blogs/". */}}
+  {{ $blogs := where site.RegularPages "Section" "blogs" }}
+  {{ $caseStudies := where $blogs "Params.tags" "intersect" (slice "case-study") }}
+  {{ with complement $caseStudies $blogs }}
     <section class="home-block">
       <h2 class="home-block__label"><span class="prompt">$</span> ls blogs/</h2>
       {{ range .GroupByDate "2006" }}

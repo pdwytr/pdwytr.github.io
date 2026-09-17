@@ -54,3 +54,11 @@ timeZone = "America/Chicago"
   github = "https://github.com/pdwytr"
   twitter = "https://x.com/pdwytrfa"
   linkedin = "https://www.linkedin.com/in/pdwytr/"
+
+# Authorship disclosure, rendered as a colophon at the foot of every article by
+# layouts/_partials/colophon.html. Case studies were AI-generated from Khalid's
+# own project notes; ordinary posts are AI-paraphrased from his own drafts. The
+# wording lives here so both variants stay in one place.
+[params.colophon]
+  caseStudy = "AI, generated from my own project notes. The work, the decisions and the numbers are mine."
+  blogPost = "AI, paraphrased from my own draft. All of the content is mine."

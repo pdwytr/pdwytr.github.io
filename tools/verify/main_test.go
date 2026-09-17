@@ -193,3 +193,28 @@ func TestAssetPathFor(t *testing.T) {
 		})
 	}
 }
+
+func TestPartitionArticlesKeepsIndexesDisjoint(t *testing.T) {
+	pages := []page{
+		{URL: "/blogs/pigeon/", CaseStudy: false},
+		{URL: "/blogs/llm-agent-runtime/", CaseStudy: true},
+		{URL: "/blogs/real-leverage/", CaseStudy: false},
+		{URL: "/blogs/managed-analytics-platform/", CaseStudy: true},
+	}
+
+	blogPosts, caseStudies := partitionArticles(pages)
+
+	if len(blogPosts) != 2 || len(caseStudies) != 2 {
+		t.Fatalf("got %d blog posts and %d case studies, want 2 and 2", len(blogPosts), len(caseStudies))
+	}
+	for _, p := range blogPosts {
+		if p.CaseStudy {
+			t.Errorf("%s: case study leaked into the blogs listing", p.URL)
+		}
+	}
+	for _, p := range caseStudies {
+		if !p.CaseStudy {
+			t.Errorf("%s: ordinary blog leaked into the case-studies listing", p.URL)
+		}
+	}
+}

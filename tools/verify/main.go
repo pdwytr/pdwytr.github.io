@@ -110,18 +110,13 @@ func run(root string) ([]string, error) {
 		}
 	}
 
+	blogPosts, caseStudies := partitionArticles(idx.Pages)
+
 	blogsIndex, err := os.ReadFile(filepath.Join(root, "blogs", "index.html"))
 	if err != nil {
 		problems = append(problems, "blogs index missing from build output")
 	} else {
-		problems = append(problems, listingProblems("blogs index", blogsIndex, idx.Pages)...)
-	}
-
-	var caseStudies []page
-	for _, p := range idx.Pages {
-		if p.CaseStudy {
-			caseStudies = append(caseStudies, p)
-		}
+		problems = append(problems, listingProblems("blogs index", blogsIndex, blogPosts)...)
 	}
 	caseStudiesIndex, err := os.ReadFile(filepath.Join(root, "case-studies", "index.html"))
 	if err != nil {
@@ -199,6 +194,20 @@ func hasSocialLink(html, linkURL, label string) bool {
 	quotedLabel := regexp.QuoteMeta(label)
 	pattern := `(?is)<a\b[^>]*\bhref=(?:"` + quotedURL + `"|` + quotedURL + `)(?:\s|>)[^>]*\baria-label=(?:"` + quotedLabel + `"|` + quotedLabel + `)(?:\s|>)`
 	return regexp.MustCompile(pattern).MatchString(html)
+}
+
+// partitionArticles splits the page index into the set listed on /blogs/ and
+// the set listed on /case-studies/. The two are disjoint: a case study keeps
+// its canonical /blogs/<slug>/ URL but is listed only on /case-studies/.
+func partitionArticles(pages []page) (blogPosts, caseStudies []page) {
+	for _, p := range pages {
+		if p.CaseStudy {
+			caseStudies = append(caseStudies, p)
+		} else {
+			blogPosts = append(blogPosts, p)
+		}
+	}
+	return blogPosts, caseStudies
 }
 
 func articleIndexProblems(pages []page) []string {

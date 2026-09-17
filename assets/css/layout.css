@@ -199,3 +199,16 @@
   border-bottom: 1px solid var(--border); padding-bottom: var(--space-1);
 }
 .home-block__more { font-family: var(--font-mono); font-size: var(--step--1); margin: var(--space-3) 0 0; }
+
+.colophon {
+  margin-top: var(--space-5); padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+.colophon__line {
+  font-size: var(--step--1); color: var(--fg-muted);
+  max-width: var(--measure); margin: 0;
+}
+.colophon__label {
+  font-family: var(--font-mono); text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--fg-muted);
+}

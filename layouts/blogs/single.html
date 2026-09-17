@@ -37,5 +37,7 @@
         <ul>{{ range . }}<li><a href="{{ .href }}">{{ .label }}</a></li>{{ end }}</ul>
       </aside>
     {{ end }}
+
+    {{ partial "colophon.html" (cond $isCaseStudy site.Params.colophon.caseStudy site.Params.colophon.blogPost) }}
   </article>
 {{ end }}

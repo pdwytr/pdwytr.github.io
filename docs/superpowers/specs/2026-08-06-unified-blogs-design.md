@@ -1,15 +1,15 @@
 # Unified Blogs and Case Studies Design
 
 **Date:** 2026-08-06
-**Status:** Approved
+**Status:** Approved (amended 2026-09-17 — see Amendments)
 
 ## Objective
 
-Replace the separate writing and case-study content sections with one blog content model. Every published article appears in the blogs index. Articles tagged `case-study` also appear in a dedicated case-studies index.
+Replace the separate writing and case-study content sections with one blog content model. Every published article keeps a canonical `/blogs/<slug>/` URL. Ordinary articles are listed on the blogs index; articles tagged `case-study` are listed on the case-studies index instead.
 
 The resulting public structure is:
 
-- `/blogs/` — every published article, reverse chronological
+- `/blogs/` — every published article except case studies, reverse chronological
 - `/blogs/<slug>/` — the canonical URL for every article, including case studies
 - `/case-studies/` — only articles whose `tags` contain `case-study`
 - `/tags/<tag>/` — Hugo's normal tag archives
@@ -49,7 +49,7 @@ Tag membership is the only classification mechanism. There is no separate case-s
 
 ### Blogs index
 
-`/blogs/` lists every regular page in the `blogs` section. Case studies are not excluded or visually duplicated; each article appears once in the complete list.
+`/blogs/` lists the regular pages in the `blogs` section whose tags do not contain `case-study`. Case studies are excluded here and listed on `/case-studies/` instead, so the two indexes are disjoint and no article is listed twice.
 
 ### Case-studies index
 
@@ -143,3 +143,20 @@ Final verification uses `make test`, `make check`, and `make build`.
 - Case-study detail pages retain their specialized metadata.
 - Navigation, homepage, résumé, RSS, JSON index, social cards, and validation use the unified model.
 - `make test`, `make check`, and `make build` exit successfully.
+
+## Amendments
+
+### 2026-09-17 — case studies leave the blogs index
+
+The original design listed case studies on both `/blogs/` and `/case-studies/`.
+In practice that read as duplication: the same four articles filled most of the
+blogs index. The indexes are now disjoint — `/blogs/` excludes the `case-study`
+tag, `/case-studies/` selects it.
+
+Unchanged: bundles stay in `content/blogs/`, canonical URLs stay
+`/blogs/<slug>/`, tag membership remains the only classification mechanism, and
+résumé links keep resolving. Only listing membership changed.
+
+Enforced by `partitionArticles` in `tools/verify/main.go`, which feeds each
+index its own half of the page index; the build fails if either index lists an
+article belonging to the other.

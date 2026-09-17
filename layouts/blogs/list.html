@@ -4,7 +4,11 @@
     <p class="section-head__desc">{{ .Params.description }}</p>
   </header>
 
-  {{ $byYear := .RegularPagesRecursive.GroupByDate "2006" }}
+  {{/* Case studies live on /case-studies/; they keep their /blogs/<slug>/
+       URLs but are not listed here. See layouts/case-studies.html. */}}
+  {{ $all := .RegularPagesRecursive }}
+  {{ $caseStudies := where $all "Params.tags" "intersect" (slice "case-study") }}
+  {{ $byYear := (complement $caseStudies $all).GroupByDate "2006" }}
   {{ range $byYear }}
     <section class="year">
       <h2 class="year__label">{{ .Key }}</h2>
