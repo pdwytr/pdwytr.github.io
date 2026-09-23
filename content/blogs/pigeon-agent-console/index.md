@@ -58,7 +58,7 @@ Every engine reports limits differently. Claude Code has a five-hour and a weekl
 
 That's the rule the rest of the product follows from, and the refactor is the simplest version of it: nothing was moving on screen, so I read nothing as fine.
 
-The same thing happens with numbers, where it's harder to catch, because a missing value and a zero look identical once you render them the same way. If a field disappears because an engine changed its format and the reader quietly substitutes a default, you get a usage bar sitting at zero that reads as plenty of room when the truth is that nobody knows. [TK: has this actually happened — an engine changed format and the panel showed headroom that wasn't there? If not, say so and I'll write it as something you built for rather than something you hit.]
+The same thing happens with numbers, where it's harder to catch, because a missing value and a zero look identical once you render them the same way. If a field disappears because an engine changed its format and the reader quietly substitutes a default, you get a usage bar sitting at zero that reads as plenty of room when the truth is that nobody knows. That one hasn't caught me, and I'd rather it didn't: engines change their formats on their own schedule, and a bar reading zero when it means "unknown" is the sort of thing you'd only discover by running out of something you thought you had.
 
 So four states, rendered four ways:
 
@@ -131,4 +131,4 @@ cd pigeon && npm install && npm run tauri dev
 
 You need Rust stable, Node 20+, and whichever engines you use on your PATH. Pigeon never bundles or updates a CLI — it launches the ones you installed.
 
-[TK: what has actually changed in how you work since running it? More agents in flight at once, faster turnaround on permission prompts, something you didn't expect? One or two true sentences here and the piece ends on that instead of on the clone command.]
+What's changed for me is small but constant: I catch a blocked agent when it blocks rather than an hour later, and I can see where each subscription stands without going and looking for it. Across a few weeks of running several agents at once, that has added up to a lot of hours I'd otherwise have spent waiting on something that wasn't running.
