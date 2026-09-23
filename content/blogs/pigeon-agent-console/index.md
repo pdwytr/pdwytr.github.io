@@ -1,16 +1,16 @@
 ---
-title: "Pigeon: a small window for the agents you already run"
-description: "An agent stopped on a permission prompt looks exactly like an agent that is working. Pigeon reads what Claude Code, Codex and OpenCode write to disk and shows which one is waiting."
+title: "Pigeon: you thought your agents were working, but they were blocked"
+description: "Pigeon reads what Claude Code, Codex and OpenCode write to disk and shows which sessions are running, which are waiting on you, and which are done."
 date: 2026-09-16
 tags: ["rust", "tauri", "ai-agents", "developer-tools", "tmux"]
 draft: false
 ---
 
-I started an agent on a large refactor and went to do something else. It hit a permission prompt a few minutes in. I came back an hour later expecting the refactor to be done and found it had not started.
+I started an agent on a large refactor and went off to do something else, and a few minutes in it blocked on a permission prompt and just sat there. I came back an hour later expecting the whole thing to be done, and it hadn't even started.
 
-That is the actual failure, and it is not a missing notification — there was never going to be a notification. An agent sitting on a permission prompt looks exactly like an agent that is working. Both are a still screen in a pane you are not looking at. So you assume it is running, and by the time you check, the hour is gone and nothing has happened.
+It isn't that a notification failed to reach me, because there was never going to be one in the first place. An agent that's blocked on a permission prompt and an agent that's halfway through the work look exactly the same from the outside — both are a still pane you aren't currently looking at — so you assume it's running and you go do something else.
 
-Run three engines across a dozen panes and you are not tracking ten agents. You are assuming about ten agents.
+Multiply that across three engines and a dozen panes and you're not really tracking any of them, you're just assuming.
 
 [Pigeon](https://github.com/pdwytr/pigeon) is a 322-pixel window that sits on top of everything and tells you which one is waiting.
 
@@ -28,7 +28,7 @@ It is local-only. The only network call it makes is the usage endpoint Claude Co
 
 ## Using it with tmux
 
-Pigeon does not know what tmux is. It reads the engine's own files, so it works the same whether your agents are in tmux panes, separate terminal windows, or tabs you lost track of. tmux only changes what you do with the answer, because there the jump is one command.
+Pigeon doesn't know what tmux is — it reads the engine's own files, so it works the same whether your agents are in tmux panes, separate terminal windows, or tabs you've lost track of. What tmux changes is what you can do once you know, because there the jump is a single command.
 
 The setup is just: run your agents however you already do, and name each tmux session after the project directory.
 
@@ -56,9 +56,9 @@ Every engine reports limits differently. Claude Code has a five-hour and a weekl
 
 ## Absence is four different things
 
-That is the rule the rest of the product follows from, and the hour I lost to the refactor is the cheap version of it. Nothing was moving, so I read nothing as fine.
+That's the rule the rest of the product follows from, and the refactor is the simplest version of it: nothing was moving on screen, so I read nothing as fine.
 
-The expensive version is a number. A missing value and a zero look the same once you render them the same way. If a field disappears because an engine changed its format, and the reader substitutes a default, you get a usage bar at zero that reads as "plenty of room" when the truth is "no idea." A still pane costs you an hour. A confident empty bar costs you the window. [TK: did this actually happen to you on a usage bar — an engine changed format and the panel read as headroom? If it never did and you designed for it up front, say so and I will write it as a stance rather than a scar.]
+The same thing happens with numbers, where it's harder to catch, because a missing value and a zero look identical once you render them the same way. If a field disappears because an engine changed its format and the reader quietly substitutes a default, you get a usage bar sitting at zero that reads as plenty of room when the truth is that nobody knows. [TK: has this actually happened — an engine changed format and the panel showed headroom that wasn't there? If not, say so and I'll write it as something you built for rather than something you hit.]
 
 So four states, rendered four ways:
 
@@ -69,7 +69,7 @@ So four states, rendered four ways:
 | unavailable | tried, couldn't | the reason, plus *Try again* |
 | zero | counted, it's zero | `0` |
 
-A ratio with a zero denominator is undefined, not zero. A session whose engine could not be read gets no status badge at all, rather than "finished" — an empty list that looks like an idle machine is the one way this thing can lie to you, and it would be lying in exactly the way the panes already do.
+A ratio with a zero denominator is undefined, not zero. A session whose engine could not be read gets no status badge at all, rather than "finished" — an empty list that looks like an idle machine is the one way this thing can lie to you.
 
 ## The counting is the hard part
 
@@ -120,7 +120,7 @@ Some of what's underneath:
 
 ## What it isn't
 
-No transcript viewer, no search, no history, no charts. The rows are display-only — Pigeon tells you which pane to go to, it does not resume anything for you. It doesn't show which model a session is using and doesn't estimate dollars for subscription engines. There are about 280 Rust tests and 130 view tests behind it.
+No transcript viewer, no search, no history, no charts. The rows are display-only, so Pigeon will tell you which pane to go to but it won't resume anything for you. It doesn't show which model a session is using and doesn't estimate dollars for subscription engines. There are about 280 Rust tests and 130 view tests behind it.
 
 macOS is the verified platform; Windows and Linux compile but aren't exercised. Not signed or notarized yet.
 
