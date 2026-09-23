@@ -1,16 +1,18 @@
 ---
-title: "Pigeon: a small window for the agents you already run"
-description: "Coding agents running in tmux panes can't notify you. Pigeon reads what Claude Code, Codex and OpenCode write to disk and shows which one is waiting."
+title: "Pigeon: you thought your agents were working, but they were blocked"
+description: "Pigeon reads what Claude Code, Codex and OpenCode write to disk and shows which sessions are running, which are waiting on you, and which are done."
 date: 2026-09-16
 tags: ["rust", "tauri", "ai-agents", "developer-tools", "tmux"]
 draft: false
 ---
 
-If you run coding agents in tmux, you have no notifications.
+I started an agent on a large refactor and went off to do something else, and a few minutes in it blocked on a permission prompt and just sat there. I came back an hour later expecting the whole thing to be done, and it hadn't even started.
 
-An agent finishes its turn, or hits a permission prompt, and says so — into a pane you are not looking at, possibly in a session you are not even attached to. Nothing reaches you. You find out on your next sweep through the windows, which might be two minutes later or forty.
+It isn't that a notification failed to reach me, because there was never going to be one in the first place. An agent that's blocked on a permission prompt and an agent that's halfway through the work look exactly the same from the outside — both are a still pane you aren't currently looking at — so you assume it's running and you go do something else.
 
-[Pigeon](https://github.com/pdwytr/pigeon) is a 322-pixel window that sits on top of everything and tells you which agent is waiting.
+Multiply that across three engines and a dozen panes and you're not really tracking any of them, you're just assuming.
+
+[Pigeon](https://github.com/pdwytr/pigeon) is a 322-pixel window that sits on top of everything and tells you which one is waiting.
 
 ![The Pigeon hover: ten open agents, three running, across three projects and three engines.](pigeon-live.png "Engine, session title, project, state. That is the whole surface.")
 
@@ -26,7 +28,7 @@ It is local-only. The only network call it makes is the usage endpoint Claude Co
 
 ## Using it with tmux
 
-tmux is the reason this is useful rather than merely tidy. A GUI agent can bounce a dock icon. An agent in a tmux pane cannot do anything you will see.
+Pigeon doesn't know what tmux is — it reads the engine's own files, so it works the same whether your agents are in tmux panes, separate terminal windows, or tabs you've lost track of. What tmux changes is what you can do once you know, because there the jump is a single command.
 
 The setup is just: run your agents however you already do, and name each tmux session after the project directory.
 
@@ -54,9 +56,9 @@ Every engine reports limits differently. Claude Code has a five-hour and a weekl
 
 ## Absence is four different things
 
-This is the rule the rest of the product follows from.
+That's the rule the rest of the product follows from, and the refactor is the simplest version of it: nothing was moving on screen, so I read nothing as fine.
 
-A missing number and a zero look the same once you render them the same way. If a field disappears because an engine changed its format, and the reader substitutes a default, you get a usage bar at zero that reads as "plenty of room" when the truth is "no idea." That is the failure that costs you money.
+The same thing happens with numbers, where it's harder to catch, because a missing value and a zero look identical once you render them the same way. If a field disappears because an engine changed its format and the reader quietly substitutes a default, you get a usage bar sitting at zero that reads as plenty of room when the truth is that nobody knows. That one hasn't caught me, and I'd rather it didn't: engines change their formats on their own schedule, and a bar reading zero when it means "unknown" is the sort of thing you'd only discover by running out of something you thought you had.
 
 So four states, rendered four ways:
 
@@ -91,7 +93,7 @@ And no invented dollar figures. Claude and Codex are subscription logins; a per-
 
 ## Architecture
 
-Tauri v2. A Rust host of about 18,000 lines, a React view of about 8,800, no Python, no sidecar, no database of its own.
+Tauri v2. A Rust host, a React view, no Python, no sidecar, no database of its own.
 
 ```text
 src-tauri/src/
@@ -118,7 +120,7 @@ Some of what's underneath:
 
 ## What it isn't
 
-No transcript viewer, no search, no history, no charts. It doesn't show which model a session is using and doesn't estimate dollars for subscription engines. There are about 270 Rust tests and 130 view tests behind it.
+No transcript viewer, no search, no history, no charts. The rows are display-only, so Pigeon will tell you which pane to go to but it won't resume anything for you. It doesn't show which model a session is using and doesn't estimate dollars for subscription engines. There are about 280 Rust tests and 130 view tests behind it.
 
 macOS is the verified platform; Windows and Linux compile but aren't exercised. Not signed or notarized yet.
 
@@ -128,3 +130,5 @@ cd pigeon && npm install && npm run tauri dev
 ```
 
 You need Rust stable, Node 20+, and whichever engines you use on your PATH. Pigeon never bundles or updates a CLI — it launches the ones you installed.
+
+What's changed for me is small but constant: I catch a blocked agent when it blocks rather than an hour later, and I can see where each subscription stands without going and looking for it. Across a few weeks of running several agents at once, that has added up to a lot of hours I'd otherwise have spent waiting on something that wasn't running.
