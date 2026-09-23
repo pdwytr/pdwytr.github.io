@@ -1,16 +1,18 @@
 ---
 title: "Pigeon: a small window for the agents you already run"
-description: "Coding agents running in tmux panes can't notify you. Pigeon reads what Claude Code, Codex and OpenCode write to disk and shows which one is waiting."
+description: "An agent stopped on a permission prompt looks exactly like an agent that is working. Pigeon reads what Claude Code, Codex and OpenCode write to disk and shows which one is waiting."
 date: 2026-09-16
 tags: ["rust", "tauri", "ai-agents", "developer-tools", "tmux"]
 draft: false
 ---
 
-If you run coding agents in tmux, you have no notifications.
+I started an agent on a large refactor and went to do something else. It hit a permission prompt a few minutes in. I came back an hour later expecting the refactor to be done and found it had not started.
 
-An agent finishes its turn, or hits a permission prompt, and says so — into a pane you are not looking at, possibly in a session you are not even attached to. Nothing reaches you. You find out on your next sweep through the windows, which might be two minutes later or forty.
+That is the actual failure, and it is not a missing notification — there was never going to be a notification. An agent sitting on a permission prompt looks exactly like an agent that is working. Both are a still screen in a pane you are not looking at. So you assume it is running, and by the time you check, the hour is gone and nothing has happened.
 
-[Pigeon](https://github.com/pdwytr/pigeon) is a 322-pixel window that sits on top of everything and tells you which agent is waiting.
+Run three engines across a dozen panes and you are not tracking ten agents. You are assuming about ten agents.
+
+[Pigeon](https://github.com/pdwytr/pigeon) is a 322-pixel window that sits on top of everything and tells you which one is waiting.
 
 ![The Pigeon hover: ten open agents, three running, across three projects and three engines.](pigeon-live.png "Engine, session title, project, state. That is the whole surface.")
 
@@ -26,7 +28,7 @@ It is local-only. The only network call it makes is the usage endpoint Claude Co
 
 ## Using it with tmux
 
-tmux is the reason this is useful rather than merely tidy. A GUI agent can bounce a dock icon. An agent in a tmux pane cannot do anything you will see.
+Pigeon does not know what tmux is. It reads the engine's own files, so it works the same whether your agents are in tmux panes, separate terminal windows, or tabs you lost track of. tmux only changes what you do with the answer, because there the jump is one command.
 
 The setup is just: run your agents however you already do, and name each tmux session after the project directory.
 
@@ -54,9 +56,9 @@ Every engine reports limits differently. Claude Code has a five-hour and a weekl
 
 ## Absence is four different things
 
-This is the rule the rest of the product follows from.
+That is the rule the rest of the product follows from, and the hour I lost to the refactor is the cheap version of it. Nothing was moving, so I read nothing as fine.
 
-A missing number and a zero look the same once you render them the same way. If a field disappears because an engine changed its format, and the reader substitutes a default, you get a usage bar at zero that reads as "plenty of room" when the truth is "no idea." That is the failure that costs you money.
+The expensive version is a number. A missing value and a zero look the same once you render them the same way. If a field disappears because an engine changed its format, and the reader substitutes a default, you get a usage bar at zero that reads as "plenty of room" when the truth is "no idea." A still pane costs you an hour. A confident empty bar costs you the window. [TK: did this actually happen to you on a usage bar — an engine changed format and the panel read as headroom? If it never did and you designed for it up front, say so and I will write it as a stance rather than a scar.]
 
 So four states, rendered four ways:
 
@@ -67,7 +69,7 @@ So four states, rendered four ways:
 | unavailable | tried, couldn't | the reason, plus *Try again* |
 | zero | counted, it's zero | `0` |
 
-A ratio with a zero denominator is undefined, not zero. A session whose engine could not be read gets no status badge at all, rather than "finished" — an empty list that looks like an idle machine is the one way this thing can lie to you.
+A ratio with a zero denominator is undefined, not zero. A session whose engine could not be read gets no status badge at all, rather than "finished" — an empty list that looks like an idle machine is the one way this thing can lie to you, and it would be lying in exactly the way the panes already do.
 
 ## The counting is the hard part
 
@@ -91,7 +93,7 @@ And no invented dollar figures. Claude and Codex are subscription logins; a per-
 
 ## Architecture
 
-Tauri v2. A Rust host of about 18,000 lines, a React view of about 8,800, no Python, no sidecar, no database of its own.
+Tauri v2. A Rust host, a React view, no Python, no sidecar, no database of its own.
 
 ```text
 src-tauri/src/
@@ -118,7 +120,7 @@ Some of what's underneath:
 
 ## What it isn't
 
-No transcript viewer, no search, no history, no charts. It doesn't show which model a session is using and doesn't estimate dollars for subscription engines. There are about 270 Rust tests and 130 view tests behind it.
+No transcript viewer, no search, no history, no charts. The rows are display-only — Pigeon tells you which pane to go to, it does not resume anything for you. It doesn't show which model a session is using and doesn't estimate dollars for subscription engines. There are about 280 Rust tests and 130 view tests behind it.
 
 macOS is the verified platform; Windows and Linux compile but aren't exercised. Not signed or notarized yet.
 
@@ -128,3 +130,5 @@ cd pigeon && npm install && npm run tauri dev
 ```
 
 You need Rust stable, Node 20+, and whichever engines you use on your PATH. Pigeon never bundles or updates a CLI — it launches the ones you installed.
+
+[TK: what has actually changed in how you work since running it? More agents in flight at once, faster turnaround on permission prompts, something you didn't expect? One or two true sentences here and the piece ends on that instead of on the clone command.]
