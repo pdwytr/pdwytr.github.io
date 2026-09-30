@@ -1,53 +1,84 @@
 ---
 title: "Résumé"
-description: "Backend-leaning application engineer — Python services, APIs, and distributed state. Five years across web, backend, and data systems."
+description: "Software engineer building security, observability, and CI/CD for agentic AI. Six years of APIs and data-intensive systems, much of it under GxP."
 date: 2026-07-27
+lastmod: 2026-09-30
 ---
 
-[Download PDF](/mohammed-khalid-shaik-resume.pdf) · [moknshaik@gmail.com](mailto:moknshaik@gmail.com) · [LinkedIn](https://www.linkedin.com/in/pdwytr/) · [GitHub](https://github.com/pdwytr)
+[Download PDF](/mohammed-khalid-shaik-resume.pdf) · [moknshaik@gmail.com](mailto:moknshaik@gmail.com) · [LinkedIn](https://www.linkedin.com/in/pdwytr/) · [GitHub](https://github.com/pdwytr) · Dallas, TX
 
-Backend-leaning application engineer with 5+ years building Python services,
-REST APIs, CLI workflows, and customer-facing platforms across web, backend,
-and data systems.
+Software engineer with 6 years of experience building APIs and data-intensive
+applications. Currently engineering security, observability, and CI/CD
+pipelines for a commercial agentic AI platform used in life sciences research.
+Previously owned large-scale data infrastructure for companies including Takeda
+and Crinetics, along with leading their AWS disaster recovery under formal
+change control and GxP audit.
 
 ## Experience
 
-#### Integrated Analytics Solutions — 06/2026 to present
+### Software Engineer, Integrated Analytics Solutions — May 2023 to present
 
-Production LLM agent runtime. Contributed YAML write-safety, canonical-hash
-trust verification, configurable memory controls, a CLI exit-code contract, and
-an AST-based CI check that blocks stub implementations.
-→ [Case study](/blogs/llm-agent-runtime/)
+#### AI agent platform for life sciences research
 
-#### Takeda — 07/2025 to 07/2026
+- Built least-privilege sandboxing for coding agents on a life sciences AI
+  agent platform used by 30+ drug researchers. It uses macOS Seatbelt, chosen
+  after ruling out Apple's App Sandbox, so each agent can only reach the files
+  its task allows.
+- Built a 10-trial evaluation that blocks new agent personalities whose
+  behavior breaks their guardrails, and added Codex and Hermes to the
+  platform's agent monitoring, covering token spend and blocked sessions.
+- Designed a multi-agent system for shipping production fixes and security
+  patches: controlling what context each agent receives, isolating workers in
+  Docker Sandboxes, tracking each agent's token spend, and gating every merge on
+  a read-only verifier agent's test proof. Cut reopened tickets by about 50%.
 
-Built an eight-endpoint FastAPI service with bearer-token sessions, isolated
-storage, integrity checks, and asynchronous processing. Cut per-file processing
-from over fifteen minutes to under thirty seconds.
-→ [Case study](/blogs/document-conversion-api/)
+#### Crinetics Pharmaceuticals, clinical-data delivery
 
-#### Integrated Analytics Solutions — 05/2023 to 03/2025
+- Rebuilt Crinetics' regulated clinical-data delivery (SFTP to SMB) as an
+  agent-operable service that AI agents and administrators can configure,
+  monitor, diagnose and recover. It handles thousands of files a day and
+  delivers ~100-file bursts in under 3 seconds with exactly-once delivery and
+  immutable GxP audit trails.
 
-Designed a Python service reconciling database requests with Kubernetes,
-managing the lifecycle of isolated analytics pods through explicit operational
-states. Provisioning went from days to minutes at ~1,000 concurrent users.
-→ [Case study](/blogs/managed-analytics-platform/)
+#### Takeda, R&D data infrastructure
 
-#### GameStop — 09/2022 to 05/2023
+- Owned AWS disaster recovery for a single-region R&D SaaS platform (1,000+
+  users, ~20 TB), delivering a GxP-validated 2-hour RTO / 4-hour RPO. Authored
+  the standby environment in Terraform and Lambda automation that auto-attached
+  backup EBS volumes to recovery instances at failover.
+- Served as the approving reviewer on the data infrastructure Terraform
+  repository, where every applied plan mutated AWS infrastructure. Gated 50+ PRs
+  with validated testing, documented releases, and change-control sign-off,
+  enabling junior engineers to ship safely in a GxP environment.
+- Built a FastAPI and SAS automation service that cut manual FDA clinical
+  report RTF-to-PDF assembly from 15+ minutes to under 30 seconds per (~10 MB)
+  file, supporting RTFs up to 1 GB for 10,000+ statistical users.
+  → [Case study](/blogs/document-conversion-api/)
 
-Built an Airflow- and API-integrated approval workflow with database-backed
-tracking and dashboards, reducing team effort 80%.
-→ [Case study](/blogs/promotion-approval-workflow/)
+### Software Engineer, GameStop — Nov 2022 to May 2023
+
+- Automated promotion approvals with Python, SQL, and REST APIs, cutting
+  monthly review effort by 80% (100 hours → 20 hours) and eliminating the
+  manual gaps that had previously exposed the team to compliance penalties.
+  → [Case study](/blogs/promotion-approval-workflow/)
+
+### Software Engineer, M&G — Jan 2021 to Aug 2022
+
+- Developed a service for monitoring and self-healing across 1,500+ servers,
+  resolving about half of recurring tickets automatically and saving 100+ team
+  hours per month while protecting SLA timelines.
 
 ## Skills
 
-- **Languages** — Python, Bash, SQL
-- **Frameworks & APIs** — FastAPI, React, REST, WebSocket, OpenAPI
-- **Data** — PostgreSQL, pgvector, Apache Airflow, pandas
-- **Testing** — pytest, unit/integration/e2e, AST static analysis
-- **Infrastructure** — Docker, Kubernetes, AWS, Linux, Git
+- **AI / LLM engineering** — agent orchestration (LangGraph, Pydantic AI), model routing (LiteLLM), semantic caching (LangCache), retrieval (RAG, pgvector), sandboxed agent execution (Docker Sandboxes, macOS Seatbelt, Windows AppContainer)
+- **Languages** — Python, Rust, JavaScript/TypeScript, SQL
+- **Frameworks** — Tauri, FastAPI, React
+- **Backend & APIs** — REST, WebSockets, async & concurrent programming, microservices, distributed systems
+- **Cloud & infra** — AWS, Terraform, Kubernetes, Docker
+- **Data** — PostgreSQL, Redis, pandas, Pydantic, SQLAlchemy, Airflow
+- **Testing & quality** — pytest, Locust load testing, integration & e2e testing, AST static analysis, CI/CD
+- **Compliance** — GxP, change control, audit readiness
 
 ## Education
 
-- **M.S. Data Science** — University of Texas at Arlington, 2022
-- **Post Graduate Diploma, Data Science** — INSOFE (CMU-accredited), 2020
+- **M.S. Data Science** — The University of Texas at Arlington, Dec 2023
