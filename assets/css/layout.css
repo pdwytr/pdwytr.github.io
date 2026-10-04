@@ -27,7 +27,7 @@
   font-size: var(--step--1);
   color: var(--fg-muted);
   display: flex;
-  gap: var(--space-3);
+  gap: var(--space-1) var(--space-3);
   flex-wrap: wrap;
 }
 
@@ -112,7 +112,7 @@
 .row__title:hover { color: var(--accent); text-decoration: underline; }
 
 @media (max-width: 34rem) {
-  .row { grid-template-columns: 1fr auto; }
+  .row { grid-template-columns: 1fr auto; row-gap: 0; }
   .row__date { grid-column: 1 / -1; }
   .site-head { gap: var(--space-2); }
   .site-head__name { order: 1; }
@@ -126,8 +126,9 @@
   font-family: var(--font-mono); font-size: var(--step--1); color: var(--fg-muted); margin: 0;
 }
 .sep { margin: 0 var(--space-2); opacity: 0.5; }
+.nowrap { white-space: nowrap; }
 .post__tags { margin-top: var(--space-1); }
-.post__tags a { color: var(--fg-muted); text-decoration: none; }
+.post__tags a { color: var(--fg-muted); text-decoration: none; white-space: nowrap; }
 .post__tags a:hover { color: var(--accent); }
 
 .discuss {
@@ -144,6 +145,7 @@
   padding: var(--space-4);
   background: var(--bg-elev);
 }
+@media (max-width: 34rem) { .card { padding: var(--space-3); } }
 .card__title { font-size: var(--step-1); margin: 0 0 var(--space-1); line-height: 1.2; }
 .card__title a { color: var(--fg); text-decoration: none; }
 .card__title a:hover { color: var(--accent); }
@@ -155,7 +157,7 @@
 
 .metrics {
   list-style: none; margin: 0 0 var(--space-3); padding: 0;
-  display: flex; flex-wrap: wrap; gap: var(--space-4);
+  display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-4);
 }
 .metric { display: flex; flex-direction: column; }
 .metric__value {

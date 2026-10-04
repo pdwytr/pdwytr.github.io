@@ -6,18 +6,19 @@
       <h1>{{ .Title }}</h1>
       <p class="post__meta">
         <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 Jan 2006" }}</time>
+        {{- /* no whitespace beside .sep: its margins are the spacing */ -}}
         <span class="sep">·</span>{{ .ReadingTime }} min
-        {{ if ne .Lastmod.Unix .Date.Unix }}
+        {{- if ne .Lastmod.Unix .Date.Unix -}}
           <span class="sep">·</span>updated {{ .Lastmod.Format "2 Jan 2006" }}
-        {{ end }}
+        {{- end }}
       </p>
       {{ with .Params.tags }}
         <p class="post__tags">{{ range . }}<a href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">#{{ . }}</a> {{ end }}</p>
       {{ end }}
       {{ if $isCaseStudy }}
         <p class="post__meta">
-          {{ .Params.role }}{{ with .Params.org }} · {{ . }}{{ end }}
-          <span class="sep">·</span>{{ .Params.period.start }}–{{ .Params.period.end | default "present" }}
+          {{ .Params.role }}{{ with .Params.org }} · {{ . }}{{ end -}}
+          <span class="sep">·</span><span class="nowrap">{{ .Params.period.start }} – {{ .Params.period.end | default "present" }}</span>
         </p>
         <p class="post__desc">{{ .Params.description }}</p>
         {{ partial "metrics.html" . }}
