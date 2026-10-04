@@ -14,7 +14,7 @@ The hardest problem in applying AI isn't capability — it's classification. Spe
 
 Take software architecture. The system has to be airtight — no leaks, no ambiguity. And given the number of times an application runs in production, any probabilistic error that AI could make while architecting is essentially guaranteed to surface. Race conditions, null pointers, memory leaks — if the probability is non-zero and the system runs long enough, it's not a matter of *if*, it's *when*.
 
-Now, humans make those errors too. Software development has never had 100% reliability in theory. But in practice, the reliability gap between a skilled human architect and current models is significant — roughly 100x. More importantly, humans bear liability for their code. That accountability dimension alone makes human judgment irreplaceable at the architecture level, beyond just error rates.
+Now, humans make those errors too; software development has never been 100% reliable. But the reliability gap between a skilled human architect and current models is significant — roughly 100x. More importantly, humans bear liability for their code. That accountability dimension alone makes human judgment irreplaceable at the architecture level, beyond just error rates.
 
 ---
 
