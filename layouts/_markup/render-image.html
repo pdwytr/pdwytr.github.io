@@ -1,5 +1,7 @@
 {{- with .Page.Resources.GetMatch .Destination -}}
-  {{- $img := .Resize "1200x webp q82" -}}
+  {{- /* GIFs are served as-is: resizing would drop or bloat the animation. */ -}}
+  {{- $img := . -}}
+  {{- if ne .MediaType.SubType "gif" }}{{ $img = .Resize "1200x webp q82" }}{{ end -}}
   <figure>
     <img src="{{ $img.RelPermalink }}"
          width="{{ $img.Width }}" height="{{ $img.Height }}"

@@ -5,6 +5,8 @@ date: 2026-10-11
 tags: ["rag", "retrieval", "llm", "ai-engineering", "agents"]
 ---
 
+![Evolution of RAG, in seven steps: the 2023 classic pipeline; context windows reaching 1M tokens; the cost of pasting everything; Claude Code dropping its vector database; Cursor finding semantic search still pays off; hybrid search cutting wasted file reads; and RAG staying in the enterprise.](rag-timeline.gif)
+
 Claude Code dropped its vector database. Cursor trained its own embedding model. Two of the biggest AI coding tools made opposite bets, and both of them work [1][5]. Anyone who says retrieval-augmented generation (RAG) is dead has read only half that story. So let's put the claim on trial, using the papers, the benchmarks, and what these companies actually shipped.
 
 ## A quick recap: what RAG does
