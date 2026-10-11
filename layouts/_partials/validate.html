@@ -5,12 +5,4 @@
   {{- if not .Title }}{{ errorf "frontmatter: missing 'title' in %s" $f }}{{ end -}}
   {{- if not .Params.description }}{{ errorf "frontmatter: missing 'description' in %s" $f }}{{ end -}}
   {{- if .Date.IsZero }}{{ errorf "frontmatter: missing or unparseable 'date' in %s" $f }}{{ end -}}
-
-  {{- if in (.Params.tags | default (slice)) "case-study" -}}
-    {{- range slice "role" "period" "stack" -}}
-      {{- if not (index $.Params .) -}}
-        {{- errorf "frontmatter: missing '%s' in %s" . $f -}}
-      {{- end -}}
-    {{- end -}}
-  {{- end -}}
 {{- end -}}

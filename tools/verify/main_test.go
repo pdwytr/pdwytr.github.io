@@ -12,7 +12,6 @@ func TestHomepageProblemsRequiresCompleteBlogsList(t *testing.T) {
 	for _, want := range []string{
 		"blogs list missing",
 		"blogs navigation missing",
-		"case-studies navigation missing",
 		"GitHub social link missing",
 		"X (Twitter) social link missing",
 		"LinkedIn social link missing",
@@ -29,7 +28,7 @@ func TestHomepageProblemsAcceptsFocusedHomepageControls(t *testing.T) {
 		<a href="https://github.com/pdwytr" aria-label="GitHub"></a>
 		<a href="https://x.com/pdwytrfa" aria-label="X (Twitter)"></a>
 		<a href="https://www.linkedin.com/in/pdwytr/" aria-label="LinkedIn"></a>
-		<nav><a href="/blogs/">blogs</a><a href="/case-studies/">case-studies</a></nav>
+		<nav><a href="/blogs/">blogs</a></nav>
 		<h2>$ ls blogs/</h2>
 		<button role="switch" aria-checked="true" aria-label="Switch to light theme"></button>
 	</main>`)
@@ -44,7 +43,7 @@ func TestHomepageProblemsAcceptsHugoMinifiedNavigationLinks(t *testing.T) {
 		<a href="https://github.com/pdwytr" aria-label="GitHub"></a>
 		<a href="https://x.com/pdwytrfa" aria-label="X (Twitter)"></a>
 		<a href="https://www.linkedin.com/in/pdwytr/" aria-label="LinkedIn"></a>
-		<nav><a href=/blogs/>blogs</a><a href=/case-studies/>case-studies</a></nav>
+		<nav><a href=/blogs/>blogs</a></nav>
 		<h2>$ ls blogs/</h2>
 		<button role="switch" aria-checked="true" aria-label="Switch to light theme"></button>
 	</main>`)
@@ -77,26 +76,10 @@ func TestHasExactLink(t *testing.T) {
 	}
 }
 
-func TestHomepageProblemsRejectsWrongCaseStudiesURL(t *testing.T) {
-	html := []byte(`<main>
-		<a href="https://github.com/pdwytr" aria-label="GitHub"></a>
-		<a href="https://x.com/pdwytrfa" aria-label="X (Twitter)"></a>
-		<a href="https://www.linkedin.com/in/pdwytr/" aria-label="LinkedIn"></a>
-		<nav><a href="/blogs/">blogs</a><a href="/work/">case-studies</a></nav>
-		<h2>$ ls blogs/</h2>
-		<button role="switch" aria-checked="true" aria-label="Switch to light theme"></button>
-	</main>`)
-
-	problems := strings.Join(homepageProblems(html), "\n")
-	if !strings.Contains(problems, "case-studies navigation missing") {
-		t.Fatalf("homepageProblems() = %q, want case-studies navigation problem", problems)
-	}
-}
-
 func TestHomepageProblemsRejectsSocialURLsOutsideAccessibleAnchors(t *testing.T) {
 	html := []byte(`<main>
 		<script type="application/ld+json">{"sameAs":["https://github.com/pdwytr","https://x.com/pdwytrfa","https://www.linkedin.com/in/pdwytr/"]}</script>
-		<nav><a href="/blogs/">blogs</a><a href="/case-studies/">case-studies</a></nav>
+		<nav><a href="/blogs/">blogs</a></nav>
 		<h2>$ ls blogs/</h2>
 		<button role="switch" aria-checked="true" aria-label="Dark theme"></button>
 	</main>`)
@@ -124,27 +107,27 @@ func TestArticleIndexProblemsRejectsNonBlogSections(t *testing.T) {
 func TestListingProblems(t *testing.T) {
 	pages := []page{
 		{URL: "/blogs/ordinary/"},
-		{URL: "/blogs/case-study/", CaseStudy: true},
+		{URL: "/blogs/listed/"},
 	}
 
 	t.Run("exact membership", func(t *testing.T) {
-		html := []byte(`<a href="/blogs/case-study/">case study</a>`)
-		if problems := listingProblems("case studies", html, pages[1:]); len(problems) != 0 {
+		html := []byte(`<a href="/blogs/listed/">listed</a>`)
+		if problems := listingProblems("blogs index", html, pages[1:]); len(problems) != 0 {
 			t.Fatalf("listingProblems() = %v, want no problems", problems)
 		}
 	})
 
 	t.Run("minified unquoted membership", func(t *testing.T) {
-		html := []byte(`<a href=/blogs/case-study/>case study</a>`)
-		if problems := listingProblems("case studies", html, pages[1:]); len(problems) != 0 {
+		html := []byte(`<a href=/blogs/listed/>listed</a>`)
+		if problems := listingProblems("blogs index", html, pages[1:]); len(problems) != 0 {
 			t.Fatalf("listingProblems() = %v, want no problems", problems)
 		}
 	})
 
 	t.Run("missing and unexpected", func(t *testing.T) {
 		html := []byte(`<a href="/blogs/ordinary/">ordinary</a>`)
-		problems := strings.Join(listingProblems("case studies", html, pages[1:]), "\n")
-		for _, want := range []string{"missing /blogs/case-study/", "unexpected /blogs/ordinary/"} {
+		problems := strings.Join(listingProblems("blogs index", html, pages[1:]), "\n")
+		for _, want := range []string{"missing /blogs/listed/", "unexpected /blogs/ordinary/"} {
 			if !strings.Contains(problems, want) {
 				t.Errorf("listingProblems() = %q, want problem containing %q", problems, want)
 			}
@@ -191,30 +174,5 @@ func TestAssetPathFor(t *testing.T) {
 				t.Errorf("assetPathFor(%q) = %q, want %q", tc.raw, got, tc.want)
 			}
 		})
-	}
-}
-
-func TestPartitionArticlesKeepsIndexesDisjoint(t *testing.T) {
-	pages := []page{
-		{URL: "/blogs/pigeon/", CaseStudy: false},
-		{URL: "/blogs/llm-agent-runtime/", CaseStudy: true},
-		{URL: "/blogs/real-leverage/", CaseStudy: false},
-		{URL: "/blogs/managed-analytics-platform/", CaseStudy: true},
-	}
-
-	blogPosts, caseStudies := partitionArticles(pages)
-
-	if len(blogPosts) != 2 || len(caseStudies) != 2 {
-		t.Fatalf("got %d blog posts and %d case studies, want 2 and 2", len(blogPosts), len(caseStudies))
-	}
-	for _, p := range blogPosts {
-		if p.CaseStudy {
-			t.Errorf("%s: case study leaked into the blogs listing", p.URL)
-		}
-	}
-	for _, p := range caseStudies {
-		if !p.CaseStudy {
-			t.Errorf("%s: ordinary blog leaked into the case-studies listing", p.URL)
-		}
 	}
 }

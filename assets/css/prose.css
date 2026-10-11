@@ -41,7 +41,7 @@
 }
 .prose blockquote strong { color: var(--fg); }
 
-/* Unclassed lists only: .metrics and .stack in a case-study header are flex rows. */
+/* Unclassed lists only: classed lists carry their own layout. */
 .prose :is(ul, ol):not([class]) { padding-left: 1.4em; }
 .prose :is(ul, ol):not([class]) > li + li { margin-top: var(--space-1); }
 

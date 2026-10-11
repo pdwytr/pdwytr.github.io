@@ -1,6 +1,4 @@
 {{ define "main" }}
-  {{ $tags := .Params.tags | default (slice) }}
-  {{ $isCaseStudy := in $tags "case-study" }}
   <article class="prose post">
     <header class="post__head">
       <h1>{{ .Title }}</h1>
@@ -15,18 +13,6 @@
       {{ with .Params.tags }}
         <p class="post__tags">{{ range . }}<a href="{{ (printf "/tags/%s/" (urlize .)) | relURL }}">#{{ . }}</a> {{ end }}</p>
       {{ end }}
-      {{ if $isCaseStudy }}
-        <p class="post__meta">
-          {{ .Params.role }}{{ with .Params.org }} · {{ . }}{{ end -}}
-          <span class="sep">·</span><span class="nowrap">{{ .Params.period.start }} – {{ .Params.period.end | default "present" }}</span>
-        </p>
-        <p class="post__desc">{{ .Params.description }}</p>
-        {{ partial "metrics.html" . }}
-        <ul class="stack">{{ range .Params.stack }}<li>{{ . }}</li>{{ end }}</ul>
-        {{ with .Params.links }}
-          <p class="post__links">{{ range . }}<a href="{{ .href }}">{{ .label }} →</a> {{ end }}</p>
-        {{ end }}
-      {{ end }}
     </header>
 
     {{ .Content }}
@@ -39,6 +25,6 @@
       </aside>
     {{ end }}
 
-    {{ partial "colophon.html" (cond $isCaseStudy site.Params.colophon.caseStudy site.Params.colophon.blogPost) }}
+    {{ partial "colophon.html" site.Params.colophon.blogPost }}
   </article>
 {{ end }}

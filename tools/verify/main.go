@@ -20,11 +20,10 @@ import (
 )
 
 type page struct {
-	URL       string `json:"url"`
-	Title     string `json:"title"`
-	OG        string `json:"og"`
-	Section   string `json:"section"`
-	CaseStudy bool   `json:"caseStudy"`
+	URL     string `json:"url"`
+	Title   string `json:"title"`
+	OG      string `json:"og"`
+	Section string `json:"section"`
 }
 
 type index struct {
@@ -110,19 +109,11 @@ func run(root string) ([]string, error) {
 		}
 	}
 
-	blogPosts, caseStudies := partitionArticles(idx.Pages)
-
 	blogsIndex, err := os.ReadFile(filepath.Join(root, "blogs", "index.html"))
 	if err != nil {
 		problems = append(problems, "blogs index missing from build output")
 	} else {
-		problems = append(problems, listingProblems("blogs index", blogsIndex, blogPosts)...)
-	}
-	caseStudiesIndex, err := os.ReadFile(filepath.Join(root, "case-studies", "index.html"))
-	if err != nil {
-		problems = append(problems, "case-studies index missing from build output")
-	} else {
-		problems = append(problems, listingProblems("case-studies index", caseStudiesIndex, caseStudies)...)
+		problems = append(problems, listingProblems("blogs index", blogsIndex, idx.Pages)...)
 	}
 
 	cname, err := os.ReadFile(filepath.Join(root, "CNAME"))
@@ -164,9 +155,6 @@ func homepageProblems(body []byte) []string {
 	if !hasExactLink(html, "/blogs/", "blogs") {
 		problems = append(problems, "homepage: blogs navigation missing")
 	}
-	if !hasExactLink(html, "/case-studies/", "case-studies") {
-		problems = append(problems, "homepage: case-studies navigation missing")
-	}
 	for _, social := range []struct {
 		url   string
 		label string
@@ -194,20 +182,6 @@ func hasSocialLink(html, linkURL, label string) bool {
 	quotedLabel := regexp.QuoteMeta(label)
 	pattern := `(?is)<a\b[^>]*\bhref=(?:"` + quotedURL + `"|` + quotedURL + `)(?:\s|>)[^>]*\baria-label=(?:"` + quotedLabel + `"|` + quotedLabel + `)(?:\s|>)`
 	return regexp.MustCompile(pattern).MatchString(html)
-}
-
-// partitionArticles splits the page index into the set listed on /blogs/ and
-// the set listed on /case-studies/. The two are disjoint: a case study keeps
-// its canonical /blogs/<slug>/ URL but is listed only on /case-studies/.
-func partitionArticles(pages []page) (blogPosts, caseStudies []page) {
-	for _, p := range pages {
-		if p.CaseStudy {
-			caseStudies = append(caseStudies, p)
-		} else {
-			blogPosts = append(blogPosts, p)
-		}
-	}
-	return blogPosts, caseStudies
 }
 
 func articleIndexProblems(pages []page) []string {

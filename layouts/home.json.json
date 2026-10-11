@@ -4,7 +4,6 @@
         "url" .RelPermalink
         "title" .Title
         "og" (partial "og-image.html" .)
-        "section" .Section
-        "caseStudy" (in (.Params.tags | default (slice)) "case-study")) -}}
+        "section" .Section) -}}
 {{- end -}}
 {{- dict "count" (len $pages) "pages" $pages | jsonify (dict "indent" "  ") -}}

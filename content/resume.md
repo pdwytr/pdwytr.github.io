@@ -37,7 +37,6 @@ Clients: Takeda, Crinetics, SOBI, Jazz, Neurocrine · Remote
   15 minutes to under 3 minutes per file for a service with 1,000 active users
   by building a FastAPI service that combines RTF outputs into submission PDFs
   while isolating user sessions.
-  → [Case study](/blogs/document-conversion-api/)
 - **Regulated data delivery.** Delivered clinical-trial data from external
   vendors to Crinetics' biostatistics and clinical teams by building a
   regulated pipeline that processes 100-file bursts in under 2 minutes, with
@@ -72,7 +71,6 @@ Remote
   and Zendesk API data into BigQuery.
 - **Workflow automation.** Automated promotion approvals with Python, SQL views,
   and REST APIs, cutting monthly review effort by 80%.
-  → [Case study](/blogs/promotion-approval-workflow/)
 
 ### Software Engineer, M&G — Jan 2021 to Aug 2022
 
