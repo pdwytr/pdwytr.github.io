@@ -87,9 +87,7 @@ Pick the retrieval method that fits the data and the question:
 
 Most real systems mix several of these, and every one of them needs to check who is asking.
 
-## Verdict
-
-The 2023 pipeline, one vector database and one lookup per question, is effectively dead. Retrieval is everywhere, in coding tools and inside large companies. Claude Code went with `grep`. Cursor uses `grep` and embeddings together. LinkedIn built a graph. Every one of them is still retrieving.
+So, is RAG dead? The version most of us learned in 2023, one vector database and one lookup per question, pretty much is. Retrieval itself is everywhere, in coding tools and inside large companies. Claude Code went with `grep`. Cursor uses `grep` and embeddings together. LinkedIn built a graph. Every one of them is still retrieving.
 
 If you're learning RAG now, keep going, and learn the other tools as well as vector databases. The next time someone tells you RAG is dead, ask them which RAG they mean.
 
