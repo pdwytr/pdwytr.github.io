@@ -7,7 +7,7 @@ period:
   start: "2026-06"
   end: ""
 role: "Application Engineer"
-org: "Integrated Analytics Solutions"
+org: "Integrated Analytic Solutions"
 stack: ["Python", "FastAPI", "WebSocket", "PostgreSQL", "pgvector", "pytest"]
 metrics:
   - label: "endpoints shipped (team)"

@@ -7,7 +7,7 @@ period:
   start: "2023-05"
   end: "2025-03"
 role: "Application Engineer"
-org: "Integrated Analytics Solutions"
+org: "Integrated Analytic Solutions"
 stack: ["Python", "React", "Material UI", "Kubernetes", "Docker", "APScheduler"]
 metrics:
   - label: "provisioning"
