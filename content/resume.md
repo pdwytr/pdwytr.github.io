@@ -5,7 +5,7 @@ date: 2026-07-27
 lastmod: 2026-10-11
 ---
 
-[Download PDF](/mohammed-khalid-shaik-resume.pdf) · [moknshaik@gmail.com](mailto:moknshaik@gmail.com) · [LinkedIn](https://www.linkedin.com/in/pdwytr/) · [GitHub](https://github.com/pdwytr) · Dallas, TX
+[Download PDF](/mohammed-khalid-shaik-resume.pdf) · [moknshaik@gmail.com](mailto:moknshaik@gmail.com) · [LinkedIn](https://www.linkedin.com/in/pdwytr/) · [GitHub](https://github.com/pdwytr)
 
 Software engineer with 5+ years of experience building data and AI systems.
 Shipped sandboxing, multi-agent orchestration, and observability for an AI
