@@ -1,0 +1,39 @@
+flowchart TB
+    subgraph NODE[Node B]
+        direction TB
+        CTX[Node context<br/>contracts · decisions<br/>blast radius · budget] --> V[Verifier]
+
+        V -->|issue #104 + scope| B1[Builder #104]
+        V -->|issue #105 + scope| B2[Builder #105]
+        V -->|issue #106 + scope| B3[Builder #106]
+
+        B1 --> W1[Branch issue-104<br/>in its own worktree]
+        B2 --> W2[Branch issue-105<br/>in its own worktree]
+        B3 --> W3[Branch issue-106<br/>in its own worktree]
+
+        W1 -.->|diff + tests| V
+        W2 -.->|diff + tests| V
+        W3 -.->|diff + tests| V
+
+        W1 -->|merged once approved| PR
+        W2 -->|merged once approved| PR
+        W3 -->|merged once approved| PR
+
+        PR[PR #2<br/>the node branch<br/>issues #104 – #106]
+    end
+
+    classDef verifier fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    classDef builder fill:#ffedd5,stroke:#ea580c,stroke-width:2px,color:#7c2d12
+    classDef branch fill:#fef9c3,stroke:#ca8a04,stroke-width:2px,color:#713f12
+    classDef context fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
+    classDef pr fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+    classDef ci fill:#ccfbf1,stroke:#0d9488,stroke-width:2px,color:#134e4a
+    classDef human fill:#fce7f3,stroke:#db2777,stroke-width:2px,color:#831843
+    classDef fail fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#7f1d1d
+    classDef node fill:#e0e7ff,stroke:#4f46e5,stroke-width:2px,color:#312e81
+    classDef store fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#0f172a
+    class V verifier
+    class B1,B2,B3 builder
+    class W1,W2,W3 branch
+    class CTX context
+    class PR pr

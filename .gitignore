@@ -14,3 +14,6 @@ hugo_stats.json
 
 # Agent scratch (subagent-driven-development workspace)
 /.superpowers/
+
+# Diagram renderer deps (make diagrams)
+/tools/diagrams/node_modules/

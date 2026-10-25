@@ -1,0 +1,12 @@
+gantt
+    dateFormat YYYY-MM-DD
+    axisFormat Week %W
+    section Wait for parent
+    Node A          :s1, 2026-01-05, 14d
+    Node B          :s2, after s1, 14d
+    Node D          :s3, after s2, 14d
+    section Start from contract
+    Node A          :p1, 2026-01-05, 14d
+    Node B          :p2, 2026-01-08, 14d
+    Node D          :p3, 2026-01-12, 14d
+    Restack and re-test :crit, p4, after p3, 3d

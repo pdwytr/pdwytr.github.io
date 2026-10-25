@@ -1,0 +1,30 @@
+flowchart LR
+    subgraph SRC[Sources]
+        V[Verifier]
+        B[Builders]
+        ST[CI + staging]
+    end
+
+    V -->|decisions, merges| C[Telemetry collector]
+    B -->|recorded by the sandbox runtime| C
+    ST -->|test runs, deploys| C
+
+    C --> AL[(Append-only audit log)]
+    C --> D[Dashboards]
+    C --> AR[Alerts]
+
+    classDef verifier fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    classDef builder fill:#ffedd5,stroke:#ea580c,stroke-width:2px,color:#7c2d12
+    classDef branch fill:#fef9c3,stroke:#ca8a04,stroke-width:2px,color:#713f12
+    classDef context fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95
+    classDef pr fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+    classDef ci fill:#ccfbf1,stroke:#0d9488,stroke-width:2px,color:#134e4a
+    classDef human fill:#fce7f3,stroke:#db2777,stroke-width:2px,color:#831843
+    classDef fail fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#7f1d1d
+    classDef node fill:#e0e7ff,stroke:#4f46e5,stroke-width:2px,color:#312e81
+    classDef store fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#0f172a
+    class V verifier
+    class B builder
+    class ST ci
+    class C,AL,D store
+    class AR fail

@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "type": "module",
+  "description": "Renders blog-post Mermaid diagrams to SVG; see render.mjs.",
+  "dependencies": {
+    "mermaid": "11.17.2",
+    "puppeteer": "24.15.0"
+  }
+}

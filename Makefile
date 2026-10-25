@@ -8,6 +8,7 @@ help:
 	@echo "make build              production build          -> public/"
 	@echo "make blog S=my-slug       scaffold a blog          -> content/blogs/my-slug/"
 	@echo "make check              build + verify + link check"
+	@echo "make diagrams           render content/blogs/*/diagrams/*.mmd -> .svg"
 	@echo "make clean              remove build output"
 	@echo ""
 	@echo "pinned hugo: $(HUGO_VERSION)"
@@ -52,6 +53,11 @@ chroma:
 	hugo gen chromastyles --style=github >> assets/css/code-light.css
 	printf '}\n' >> assets/css/code-light.css
 	@wc -l assets/css/code-dark.css assets/css/code-light.css
+
+.PHONY: diagrams
+diagrams:
+	cd tools/diagrams && npm ci --no-audit --no-fund
+	node tools/diagrams/render.mjs
 
 .PHONY: ogbase
 ogbase:

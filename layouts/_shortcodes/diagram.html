@@ -1,0 +1,12 @@
+{{- /* Inlines a pre-rendered Mermaid SVG from the page bundle (see
+     tools/diagrams/render.sh), so its labels use the page's Inter and its
+     colours follow the theme toggle. */ -}}
+{{- $src := .Get "src" -}}
+{{- with .Page.Resources.Get $src -}}
+  {{- $svg := replace .Content "<svg " (printf `<svg aria-label="%s" ` ($.Get "alt" | htmlEscape)) 1 -}}
+  {{- /* Never scale labels below ~72% of their 15px. */ -}}
+  {{- $w := index (findRESubmatch `viewBox="\S+ \S+ ([\d.]+)` .Content 1) 0 1 | float -}}
+  <figure class="diagram"><div style="min-width: {{ math.Round (mul $w 0.72) }}px">{{ $svg | safeHTML }}</div></figure>
+{{- else -}}
+  {{- errorf "diagram: %q not found in %s" $src $.Page.File.Path -}}
+{{- end -}}

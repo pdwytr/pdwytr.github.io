@@ -77,3 +77,16 @@
   font-size: var(--step--1);
   color: var(--fg-muted);
 }
+
+/* Inlined Mermaid diagrams (layouts/_shortcodes/diagram.html). They may use the
+   whole shell, not just the measure, and scroll sideways rather than shrink
+   their labels below a readable size. */
+.prose .diagram {
+  width: calc(100vw - 2 * var(--gutter));
+  max-width: calc(var(--measure) + 12rem - 2 * var(--gutter));
+  overflow-x: auto;
+  line-height: 1.5; /* what render.mjs measured labels with */
+}
+.prose .diagram svg { display: block; width: 100%; height: auto; margin: 0 auto; }
+/* Rendered for light; inverting and turning the hue back keeps each role's colour. */
+:root:not([data-theme="light"]) .prose .diagram svg { filter: invert(1) hue-rotate(180deg); }

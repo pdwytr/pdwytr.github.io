@@ -1,0 +1,39 @@
+sequenceDiagram
+    autonumber
+    box rgba(37,99,235,0.12) Verifier
+        participant V as Verifier
+    end
+    box rgba(234,88,12,0.12) Builders · sandboxed
+        participant B1 as Builder #35;104
+        participant B2 as Builder #35;105
+    end
+    box rgba(13,148,136,0.12) Staging
+        participant S as Staging
+    end
+    box rgba(219,39,119,0.12) Human
+        participant H as Reviewer
+    end
+
+    Note over V,B2: Build · issues run in parallel
+    par
+        V->>B1: Issue #35;104 + scope
+        B1->>B1: Code + unit tests
+        B1->>V: Diff + results
+    and
+        V->>B2: Issue #35;105 + scope
+        B2->>B2: Code + unit tests
+        B2->>V: Diff + results
+    end
+
+    Note over V,S: Integrate · one PR per node
+    V->>V: Check scope, merge into PR #35;2
+    V->>S: Run integration tests
+    S-->>V: Results
+    opt A test fails
+        V->>B1: Logs for its issue
+        B1->>V: Fixed diff
+    end
+
+    Note over V,H: Review · a human signs off
+    V->>H: PR #35;2 + evidence
+    H-->>V: Approved

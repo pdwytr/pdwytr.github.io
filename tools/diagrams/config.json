@@ -1,0 +1,23 @@
+{
+  "theme": "base",
+  "fontFamily": "\"Inter var\", system-ui, sans-serif",
+  "themeVariables": {
+    "fontFamily": "\"Inter var\", system-ui, sans-serif",
+    "fontSize": "15px",
+    "background": "#ffffff",
+    "edgeLabelBackground": "#ffffff"
+  },
+  "flowchart": {
+    "htmlLabels": true
+  },
+  "sequence": {
+    "mirrorActors": false
+  },
+  "gantt": {
+    "fontSize": 14,
+    "sectionFontSize": 14,
+    "barHeight": 26,
+    "barGap": 8,
+    "leftPadding": 150
+  }
+}
