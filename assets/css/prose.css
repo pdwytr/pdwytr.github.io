@@ -4,7 +4,7 @@
 /* Zero specificity, so component rules (.colophon, .discuss, hr) keep their own margins. */
 :where(.prose > * + *) { margin-top: var(--space-3); }
 
-/* Page title on plain pages (about, résumé); posts style theirs in .post__head. */
+/* Page title on plain pages (about); posts style theirs in .post__head. */
 .prose > h1 {
   font-size: var(--step-3);
   line-height: 1.15;

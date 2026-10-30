@@ -12,4 +12,3 @@ I write here about the parts of that work that generalise: where probabilistic t
 - **Email** — [moknshaik@gmail.com](mailto:moknshaik@gmail.com)
 - **LinkedIn** — [/in/pdwytr](https://www.linkedin.com/in/pdwytr/)
 - **GitHub** — [@pdwytr](https://github.com/pdwytr)
-- **Résumé** — [read it here](/resume/) or [download the PDF](/mohammed-khalid-shaik-resume.pdf)
